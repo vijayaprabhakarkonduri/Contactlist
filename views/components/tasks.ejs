@@ -1,0 +1,5 @@
+<div class="task" ng-repeat="task in task_list" ng-click="showTaskDetail(task)" ng-class="{active: isActive(task)}">
+	<img src="/css/images/folder_icon_small.png" />
+	<h2 class="task-list-heading">{{task.title}}</h2>
+	<p class="task-list-content" ng-bind-html="task.task">..</p>
+</div>

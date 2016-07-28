@@ -1,0 +1,35 @@
+<div class="strengths section right">
+	<div class="strengths-head section-head">
+		<h3 id="strength" class="active">Strengths</h3><h3 id="weakness">Weakness</h3>
+	</div>
+	<div class="strengths-body" ng-if="projects[0].skills">
+		<table class="table strength_tabs" id="strength_tab">
+			<tr ng-repeat="x in projects[0].skills" ng-if="x.score >= 2.5 ">
+				<td class="strength-td-title">{{x.skill}}</td>
+				<td class="strength-td-strength" ng-mouseover="showTooltip($event,x.score)" ng-mouseleave="hideTooltip($event)">
+					<div class="strengths-full-div">
+						<div class="strengths-perc-div" style="width:{{x.score*20}}%"></div>
+						<div class="strengths-tooltip">{{x.score}}</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table class="table strength_tabs" id="weakness_tab"> 
+			<tr ng-repeat="x in projects[0].skills" ng-if="x.score < 2.5">
+				<td class="strength-td-title">{{x.skill}}</td>
+				<td class="strength-td-strength" ng-mouseover="showTooltip($event,x.score)" ng-mouseleave="hideTooltip($event)">
+					<div class="strengths-full-div">
+						<div class="strengths-perc-div" style="width:{{x.score*20}}%"></div>
+						<div class="strengths-tooltip">{{x.score}}</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div ng-if="!projects[0].skills">
+		<div class="no-strength-and-weakness">
+			<img src="/css/images/king_large.png"/>
+			<p>Based on the reviews your strengths will displayed here</p>
+		</div>
+	</div>
+</div>

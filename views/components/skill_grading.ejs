@@ -1,0 +1,50 @@
+<div class="score-analysis">
+	<div class="score-analysis-text">
+		<div><h4>Rating</h4></div>
+		<div class="score-analysis-bar"></div>
+	</div>
+	<div class="mentor-skill-gradings">
+		<div class="row">
+			<div class="col-md-6 no-padding">
+				<div class="mentor-skill-grade">
+					<div class="mentor-skill-grade-bar" id="green" ng-click="tooltip()">
+						<div class="marks-status-grading"><span>0</span></div>
+						<div class="marks-status-grading"><span>1</span></div>
+						<div class="marks-status-grading"><span>2</span></div>
+						<div class="marks-status-grading"><span>3</span></div>
+						<div class="marks-status-grading"><span>4</span><span>5</span></div>
+						<div class="mentor-skill-grade-tooltip" id="grade_tooltip"  style="width:77px">
+							<h2 ng-value="getRating()">0</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="mentor-skill-graded">
+					<ul>
+						<li ng-show="rating_status >= 1 && rating_status <= 1.9">
+							<div></div>
+							<span>Is able to <strong>Remember</strong> what concepts has been tought. </span>
+						</li>	
+						<li ng-if="rating_status >= 2 && rating_status <= 2.9">
+							<div></div>
+							<span>Able to <strong>Understand</strong> the concepts. </span>
+						</li>
+						<li ng-if="rating_status >= 3 && rating_status <= 3.9">
+							<div></div>
+							<span>Capable of <strong>Applying</strong> the concepts. </span>
+						</li>
+						<li ng-if="rating_status >= 4 && rating_status <= 4.4">
+							<div></div>
+							<span>Is able to <strong>Remember</strong> what concepts has been tought. </span>
+						</li>
+						<li ng-if="rating_status >= 4.5">
+							<div></div>
+							<span>Is able to <strong>Remember</strong> what concepts has been tought. </span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

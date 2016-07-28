@@ -1,0 +1,23 @@
+<div class="notification-body" ng-repeat="x in notifications.Notification">
+	<img class="notification-person-icon" src="/css/images/user_male_circle.png">
+	<div class="mentee-task">
+		<h4 class="notification-subject" ng-if="x.status == 'submitted'"><strong>{{x.name}} submitted “{{x.project}}” Project for Review ({{x.time}})</strong></h4>
+		<h4 class="notification-subject" ng-if="x.status == 'started'"><strong>{{x.name}} started working on “{{x.project}}” Project ({{x.time}})</strong></h4>
+		<h4 class="notification-subject" ng-if="x.status != 'started' && x.status != 'submitted'"><strong>{{x.name}} sent “{{x.project}}” Project {{x.status}} for review ({{x.time}})</strong></h4>
+
+		<%- include('../components/project_details.ejs') %>
+		
+		<div class="comment-section">
+			<div class="comment-head">
+				<img src="/css/images/comment.png">
+				<h4 ng-click="displayComments($event)"><u><strong>Comments ({{x.comments.length}})</strong></u></h4>
+			</div>
+			<%- include('../components/comments.ejs') %>
+		</div>
+		<form role="form" class="">
+		    <div class="form-group">
+		      <input type="text" class="form-control field-length" placeholder="Write a comment">
+		    </div>
+		</form>
+	</div>
+</div>

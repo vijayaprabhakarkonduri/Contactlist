@@ -1,0 +1,10 @@
+<div class="task-view-background">
+	<h3>{{task.title}}</h3>
+</div>
+<div class="task_tasks">
+	<div ng-bind-html="task.description"></div>
+	<div>
+		<button class="pull-right review-button send-button-task"><a href="/timelines/<%= user.username %>" class="button">Insert</a>
+		</button>
+	</div>
+</div>

@@ -1,0 +1,57 @@
+<div class="row">
+	<div class="col-md-3 no-padding">
+		<div class="artifact" ng-click="openLink()">
+			<div class="project-heading">
+				<h2><img src="/css/images/design brief.png" />{{name}}</h2>
+				<div class="underline"></div>
+				<span>Last updated on {{last_update}}</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="timelines-view-body">
+	<div class="section-head" ng-init="mins=5;seconds=0">
+		<h3><img src="/css/images/garbage.png" />{{negativemarking.artifact_name}} Negative Marking Sheet</h3>
+		<div class="negetive-mark-timer" ng-if="!owner">
+			<p>00:<span id="mins">5</span>:<span id="seconds">0</span></p>
+		</div>
+	</div>
+	<div class="timelines negetive-mark-head">
+		<table class="table" ng-init="total=0">
+			<thead class="timelines-table-head">
+				<th>Issues <p> (Marks per Issue)</p></th>
+				<th>Category</th>
+				<th>Issues Seen</th>
+				<th>Marks</th>
+			</thead>
+			<tbody class="table-stripped timelines-view-table-body negetive-mark-body">
+				<tr ng-repeat="marking in negativemarking.issues" ng-init="count=0" class="timelines_row">
+					<td ng-model="marking.issue"  >{{marking.issue}}<p>({{marking.marks}})</p></td>
+					<td class="start-date">{{marking.category}}</td>
+					<td>
+						<div class="grade-plus">
+							<input type="number" value="0" class="marks" ng-model="marking.count" ng-if="!owner" ng-blur="changeMarks(marking.count, marking.marks)" class="marks" />
+							<input type="text" ng-model="marking.count" ng-if="owner" readonly/>
+							<img src="/css/images/plus.png" ng-click="addMarks($event, marking.marks)" ng-if="!owner" />
+							<img src="/css/images/minus.png" ng-click="subtractMarks($event, marking.marks)" ng-if="!owner"/>
+						</div>
+					</td>
+					<td class="duration" ng-model="negative_marks" ng-if="!owner">{{total_marks}}</td>
+					<td class="duration" ng-model="negative_marks" ng-if="owner">{{marking.score}}</td>
+				</tr>
+				<tr>
+					<td class="total-duration" colspan="3">Total Marks</td>
+					<td class="duration">{{total}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<%- include('../components/skill_grading.ejs') %>
+	<div class="add-task mentee-skill-grading">
+		<a href="/dashboard" ng-if="<%=user.type=='mentee'%> && !owner" >Discard</a>
+		<a href="/dashboard" ng-if="owner" ><button>Back</button></a>
+		<a href="/projects_details" ng-if="<%=user.type=='mentor'%> && !owner" >Discard</a>
+		<a href="/dashboard" ng-if="<%=user.type=='instructor'%> && !owner" >Discard</a>
+		<button ng-click="saveGrade()" ng-if="!owner">Send Grade</button>
+	</div>
+</div>

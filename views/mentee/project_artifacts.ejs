@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Project Artifacts</title>
+	<%- include('../partials/css_includes') %>
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController">
+		<div class="header">
+			<div class="container-fluid row">
+				<%- include('../partials/header.ejs') %>
+			</div>
+		</div>
+		<div class="container-fluid clearfix">
+			<div class="row page-body">
+				
+				<div class="body-sections no-margin">
+					<div class="navigation">
+						<%- include('../partials/navigation.ejs') %>
+					</div>
+					<div class="row" >
+						<%- include('../components/global_notifications.ejs') %>
+					</div>
+					<div class="body-section-layout">
+						<div>
+							<div>
+								<div class="section-head">
+									<h2><img src="/css/images/vaibhav.png" /><%=user.name%></h2>
+									<div class="pull-right" ng-if = "'<%=user.type%>' == 'mentor'">
+										<div class="peer-rating" data-toggle="modal" data-target="#redflag" ng-if = "!redflag">
+											<img src="/css/images/flag.png" />
+											<h2 class=""redflag"-button"">"REDFLAG THIS</h2>
+										</div>
+										<h2 class=""redflag"-status" ng-if = "redflag">Red Flag Escalated To Instructor</h4>									</div>
+								</div>
+								<div class="section-head">
+									<h3><img src="/css/images/folder.png" />{{problem.task_name}}</h3>
+								</div>
+								<div class="redflag-mentee report-card-body row report-card-head-hide" style="margin-bottom:30px;"  ng-if="completed">
+									<h3 class="report-card-head">
+										<img src="/css/images/reportcard.png" />
+										<span> Report Card</span>
+									</h3>
+									<img src="/css/images/arrow_down.png" class="pull-right report-expand-image"  ng-click="showReportCard()" />
+									<div class="pull-right report-card-expand">
+										<span>avg.score</span>
+										<h1 class="no-margin">{{project_grade}}</h1>
+										<span>out of 5.0</span>
+									</div>
+									<div class="report-card-body-show">
+										<div class="row">
+											<div class="col-md-8 no-padding">
+												<%- include('../components/report_card.ejs') %>
+											</div>
+											<div class="col-md-4 no-padding">
+												<%- include('../components/feedback.ejs') %>
+											</div>
+										</div>
+										<div class="row score-analysis">
+											<%- include('../components/score_analysis.ejs') %>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<%- include('../components/problem_statement_view_more') %>
+						</div>
+						<div class="artifacts-body">
+							<%- include('../components/artifacts') %>
+						</div>
+					</div>
+					<%- include('../components/add_artifact.ejs') %>
+					<%- include('../components/peer_review.ejs') %>
+					<%- include('../components/redflag_reason.ejs') %>
+				</div>
+			</div>
+		</div>
+	</div>
+	<%- include('../components/footer.ejs') %>
+<%- include('../partials/js_includes') %>
+<!-- Button trigger modal -->
+<script type="text/javascript">
+	$('.report-card-body-show').hide();
+	
+
+	myApp.controller('myController', ['$scope', 'myProfile', function($scope, myProfile){
+
+		/* myProfile is a service defined in ng-controller.js for get Profile data. */
+		myProfile.getProfile("<%= user._id %>", function(data) {
+			$scope.$apply(function () {
+				$scope.profile = data;
+			})
+		});
+	
+		$scope.completed = false;
+		
+		//$scope.report_card = ['report_card'];
+		$scope.showReportCard = function () {
+			$('.report-card-body-show').slideDown(500)
+			$('.report-card-expand').hide();
+			$('.report-expand-image').hide();
+		}
+		$scope.hideReportCard = function () {
+			$('.report-card-body-show').slideUp(500, function() {
+				$('.report-card-expand').show();
+				$('.report-expand-image').show();
+			});		
+		}
+
+		$scope.getNotificationById = function() {
+			var notification_id = "5753cf8b487ad3a448511420";
+			getNotificationById(notification_id,function(result) {
+				//console.log(result);
+			})
+		};
+
+		$scope.getTaskById = function() {
+			var id = $scope.task_id;
+			getTaskById(id,function(result){
+				//console.log(result);
+				$scope.$apply(function () {
+		            $scope.problem = {
+		            	"task_name" : result.task_name,
+		            	"short_description" : htmlDecode(result.short_description),
+		            	"description" : htmlDecode(result.task_details)
+		            }
+		        });
+			});	
+		}
+
+		$scope.getTaskIdByProjectId = function() {
+			var id = '<%= project_id %>';
+			getTaskIdByProjectId(id,function(result){
+				$scope.$apply(function () {
+		            $scope.task_id = result;
+		            $scope.getTaskById();
+		        });
+			});	
+		}
+
+		//Temporary section START
+		//Project details page. The project is not completed, which means you don't see the report card.
+		//$scope.incomplete_project = false;
+		$scope.getArtifacts = function () {
+			$scope.project_id = '<%= project_id%>';
+			getArtifacts($scope.project_id,function(result){
+				 if(typeof result === "object"){
+					$scope.$apply(function () {
+						$scope.redflag = result.redflag;
+						console.log($scope.redflag);
+						$scope.project_status = result.project_status;
+						if (result.project_status == 'recent' || result.project_status == "archived") {
+							$scope.completed = true;
+							$scope.negative_marking = result.final_grading;
+						};
+						$scope.artifacts_object = result.artifacts;
+						$scope.project_last_update = result.last_update;
+						console.log($scope.artifacts_object);
+					});
+					$scope.artifacts = [];
+
+					var count = 0;
+					for (var i = 0; i < $scope.artifacts_object.length; i++) {
+						$scope.artifacts.push({
+			                "artifact":$scope.artifacts_object[i].deliverable,
+			                "grade": $scope.artifacts_object[i].mentee_grade
+	            		})
+
+	            		if ($scope.artifacts_object[i].mentor_grade) {
+	            			count = count + parseFloat($scope.artifacts_object[i].mentor_grade.grade);
+	            			
+							var score = 0;
+							for (var j = 0; j < $scope.artifacts_object[i].mentor_grade.marks.length; j++) {
+								score = score + Number($scope.artifacts_object[i].mentor_grade.marks[j].score);
+							};
+							$scope.artifacts_object[i].score = score;
+						};
+
+					};
+					console.log($scope.artifacts);
+					$scope.project_grade = (count/$scope.artifacts_object.length).toFixed(1);
+				}
+			});
+		}
+		$scope.getdata = function (data) {
+			for($scope.i=0;$scope.i<$scope.artifacts_object.length;$scope.i++){
+				if(data == $scope.artifacts_object[$scope.i].deliverable){
+					$scope.artifactindex = $scope.i;
+					$scope.name="";
+					console.log($scope.artifacts_object[$scope.i]);                                                                                                                                                                                                                                                                           
+				}
+			}
+
+		}
+		$scope.getartifactname = function (index) {
+			//var version = $scope.name;
+			//var type = 
+			$scope.artifacts_object[index].versions.push($scope.name);
+			$scope.artifacts_object[index].last_update = getDate(new Date());
+			var data = {
+				"artifact": $scope.artifacts_object[index].deliverable,
+				"version": $scope.name,
+				"last_update": getDate(new Date()),
+				"project_id": '<%= project_id%>'
+			};
+			getMentorId('<%= project_id%>',function(result) {
+			$scope.createProjectPassiveNotification(result);
+			})
+			$scope.createProjectPassiveNotification = function(mentor_id){
+				var notificationData = {
+					"name": '<%= user.name %>',
+					"image": "/css/images/vaibhav.png",
+					"mentor_id": mentor_id ,
+					"message": "Added the " + $scope.artifacts_object[index].deliverable + " artifact for " + $scope.problem.task_name +" project" ,
+					"time": getDate(new Date()),
+					"to": "instructor",
+					"toMentor":"yes"
+				};
+				createProjectPassiveNotification(notificationData);
+			}
+			addArtifact(data);
+			$scope.global_message = {
+				"project_name": $scope.artifacts_object[index].deliverable,
+				"message": " Link is added ",
+				"to": ""
+			}
+			$('.global-notifications').show();
+			$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+			//window.location.reload();
+		}
+		
+
+		if($scope.incomplete_project) {
+			delete $scope.report_card;
+		}
+
+		$scope.getAllMentees = function  () {
+			var user_type = 'mentee';
+			getStudents(function(result){
+				console.log(result);
+				$scope.$apply(function () {
+					$scope.all_mentees = result;
+		        });
+			});	
+		}
+		$scope.getAllMentees();
+
+		$scope.autofill_mentee_username = function($event, mentee_id, mentee_mail) {
+			$scope.mentee_id = mentee_id;
+			var mentee_mail = mentee_mail;
+			$('.field-length').val(mentee_mail);
+			$(event.target).hide();
+			$('.auto-fill').hide();
+		}
+
+		$scope.redirect = function(artifact, status) {
+			if (status == 'ongoing' || status == 'completed' || $scope.project_status == 'recent' || $scope.project_status == 'archived') {
+			window.location.href = '/negative_marking/' + artifact + '/' + '<%= project_id%>';
+			};
+		}
+
+		$scope.requestPeerReview = function () {
+			console.log($scope.artifact_name);
+			var request = {
+				"owner_id" : '<%= user._id %>',
+				"owner_name" : '<%= user.name %>',
+				"mentee_id" : $scope.mentee_id,
+				"task" : $scope.problem.task_name,
+				"artifact_name" : $scope.artifact_name,
+				"project_id" : '<%= project_id %>',
+				"description" : $scope.tinymceModel,
+				"start_date" : $scope.start_date,
+				"start_time" : $scope.start_time,
+				"to" : "instructor",
+				"type" : "peer review"
+			};
+
+			requestPeerReview(request);
+
+			getUserName($scope.mentee_id,function(result){
+				$scope.peer_name = result;
+				console.log($scope.peer_name);
+
+			});
+			console.log($scope.peer_name)			
+			$scope.global_message = {
+				"project_name": $scope.artifact_name,
+				"message": " is send for peer_review to",
+				"task": $scope.peer_name,
+			}
+			console.log($scope.global_message);
+			$('.global-notifications').show();
+			$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+
+			getMentorId('<%= project_id%>',function(result) {
+				$scope.sendPeerReviewPassiveNotification(result);
+			})
+
+			$scope.sendPeerReviewPassiveNotification = function(mentor_id){
+				var notificationData = {
+					"name": '<%= user.name %>',
+					"image": "/css/images/vaibhav.png",
+					"mentor_id": mentor_id ,
+					"message": " Send" + $scope.artifact_name + " to " + $scope.peer_name +" for peerReview of " +$scope.problem.task_name +" project" ,
+					"time": getDate(new Date()),
+					"to": "instructor",
+					"toMentor":"yes"
+				};
+				$scope.peer_namee = $scope.peer_name;
+				createProjectPassiveNotification(notificationData);
+				var data = {
+					"status": "ongoing",
+					"artifact" : $scope.artifact_name,
+					"project_id": '<%= project_id%>'
+				};
+				//Invoke Add Task controller function.
+				changeReviewStatus(data);
+			}
+			
+			$scope.artifacts_object[$scope.artifact_index].review_status = "ongoing";
+			$scope.mentee_mail = $scope.tinymceModel = $scope.start_date = $scope.start_time = "";
+		}
+
+		$scope.peerReviewModel = function  (index) {
+			$scope.artifact_index = index;
+			$scope.artifact_name = $scope.artifacts_object[index].deliverable;
+		}
+
+
+		//End
+
+		$scope.redflagmentee = function  () {
+			var project_id = {
+				"project_id" : '<%= project_id%>',
+				"Reason" : $scope.reason_redflag
+			}
+			console.log($scope.reason_redflag);
+			redflagmentee(project_id, function(result){
+			});
+			$scope.global_message = {
+				"project_name": $scope.problem.task_name,
+				"message": " Raised the redflag ",
+				"to": ""
+			}
+			$('.global-notifications').show();
+			$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+			$('.peer-rating').hide();
+			$('.redflag-status').show();
+		}
+
+
+		//Invoke
+		$scope.getTaskIdByProjectId();
+		$scope.getNotificationById();
+		$scope.getArtifacts();
+		console.log($scope.artifacts_object);
+	}]);
+</script>
+</body>
+</html>

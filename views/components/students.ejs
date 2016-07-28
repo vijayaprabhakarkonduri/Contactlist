@@ -1,0 +1,43 @@
+<div ng-repeat="x in student | orderBy : '_id' :1" ng-if="x._id">
+	<div class="section-head">
+		<h3><img src="/css/images/group.png" />Batch {{x._id}}</h3>
+	</div>
+	<div class="students row" ng-repeat="y in x.users| orderBy : '_id' : 1"> 
+		<div class="col-md-5">
+			<div class="mentee-shuffling-img" ng-if="y.image">
+				<a href="/{{y.username}}">
+					<img ng-src="{{y.image}}" />
+				</a>
+			</div>
+			<a href="/{{y.username}}" ng-if="y.name">
+				<div class="mentee-shuffling-border" ng-if="!y.image">{{y.name[0]}}</div>
+			</a>
+			<a href="/{{y.username}}" ng-if="!y.name">
+				<div class="mentee-shuffling-border" ng-if="!y.image">{{y.username[0]}}</div>
+			</a>
+			<div class="mentee-shuffle-details">				
+				<p class="mentee-name mentee-name-student">
+					<a href="/{{y.username}}" ng-if="y.name">
+						<strong >{{y.name}}</strong>						
+					</a>
+					<a href="/{{y.username}}" ng-if="!y.name">
+						<strong >{{y.username}}</strong>
+					</a>
+				</p>
+			</div>
+		</div>
+		<div class="col-md-7 col-sm-7">
+			<div class="student">
+				<div class="students-status-grading"></div>
+				<div class="students-status-grading"></div>
+				<div class="students-status-grading"></div>
+				<div class="students-status-grading"></div>
+				<div class="student-status-title" ng-if="y.status == 'FAILURE'" style="left:3%;">FAILURE</div>
+				<div class="student-status-title" ng-if="y.status == 'critical'" style="left:23%;">CRITICAL</div>
+				<div class="student-status-title" ng-if="y.status == 'maybe'" style="left:43%;">MAYBE</div>
+				<div class="student-status-title" ng-if="y.status == 'DELAYED'" style="left:63%;">DELAYED</div>
+				<div class="student-status-title" ng-if="y.status == 'on schedule'" style="left:83%;">ON SHEDULE</div>
+			</div>
+		</div>
+	</div>
+</div>

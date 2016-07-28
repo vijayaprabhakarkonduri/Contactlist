@@ -1,0 +1,21 @@
+<div class="peer-review-request view-more" ng-repeat= "x in accept_task track by $index">
+	<h2><strong>{{x.mentor_name}}</strong> want to add <strong>{{x.task_name}}</strong> task to library. Do you want to add it?</h2>
+	<div class="task_approval_request">
+		<h1 class="no-margin"><img src="/css/images/problem_statement.png" />PROBLEM STATEMENT</h1>
+		<div class="underline"></div>
+		<h4>{{x.task_name}}</h4>
+		<div >{{x.short_description}}</div>
+		<div class="view-less">
+			<div ng-bind-html="x.description"></div>
+		</div>
+		<div class="pull-right task_request_notification">		
+			<button ng-click="acceptTask($index, $event)">Accept</button>
+			<button ng-click="discardTask(x._id,$event)">Discard</button>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<a href="" class="view-more-link" ng-click="viewMore($event)">View more</a>
+	<a href="" class="view-less-link" ng-click="viewLess($event)">View less</a>
+
+</div>
+<div ng-bind-html="accept_task.description"></div>

@@ -1,0 +1,11 @@
+<div class="discussion-tile clearfix" ng-repeat="discussion in discussionlist" ng-click="showDiscussionThread(discussion)" ng-class="{'active': selected == discussion}">
+	<img ng-src="{{discussion.image}}">
+	<div class="discussion-details" >
+		<h5><strong>{{discussion.name}}</strong></h5>	
+		<h4><strong>{{discussion.title}}</strong></h4>
+		<p>{{discussion.lastmessage}}</p>
+	</div>
+	<div class="pull-right discussion-time">
+		<h5>{{discussion.time}}</h5>
+	</div>
+</div>

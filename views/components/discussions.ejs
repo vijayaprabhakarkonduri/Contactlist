@@ -1,0 +1,45 @@
+<div class="task-view-background">
+	<div class="discussion-subject">
+		<h3><strong>{{messages.title}}</strong></h3>
+	</div>
+	<div class="pull-right discussion-members">
+		
+		<img ng-repeat="x in messages.members track by $index" ng-if="x.image" ng-src="{{x.image}}" title="{{x.name}}"/>
+		<div class="user-icon-placeholder" ng-repeat="x in messages.members track by $index" ng-if="!x.image">{{x.name}}</div>
+
+		
+
+
+		<span style="display: inline-block; width: 30px; height: 30px; border-radius: 15px; border: 1px solid #ccc; font-size: 1.5em; line-height: 30px; cursor: pointer;" ng-click="getAllUsers(); showUserOptions();">+</span>
+		<div class="user-options">
+			<ul>
+				<li ng-repeat="user in users track by $index">
+					<a href="" ng-click="addMember(user._id);">{{user.name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="time-recent">
+	<center><p><u>{{messages.recenttime}}</u></p></center>
+</div>
+<div class="task-view-content discussion-messages">
+	<div ng-repeat="x in messages.messages track by $index">
+		<div ng-class="{'self-message': x.id == user_id}" class="message">
+			<div class="others-message" ng-class="{'my-messages': x.id == user_id}">
+				<img class="message-person" ng-src="{{x.image}}" ng-if="x.id != user_id">
+				<span>{{x.message}}</span>
+				<img ng-src="{{x.image}}" ng-if="x.id == user_id && x.image">
+				<div class="user-icon-placeholder" ng-if="!x.image">{{x.name}}</div>
+			</div>
+			<p class="message-time" ng-class="{'my-message-time': x.id == user_id}">{{x.time}}</p>
+		</div>
+	</div>
+</div> 
+<div class="discusion-message-box">
+	<div class="discussion-input form-group">
+		<form ng-submit="submit()">
+			<input ng-model="message" type="text" />
+		</form>
+	</div>
+</div>

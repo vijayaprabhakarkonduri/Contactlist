@@ -1,0 +1,28 @@
+<div class="mentor-shuffle-tiles" ng-repeat="x in mentors">
+	<div class="mentor-layout task-details-layout">
+		<div class="mentor-shuffle-details">
+			<img ng-src="{{x.image}}">
+			<div class="mentor-review-time">
+				<h4><strong>{{x.name}}</strong></h4>
+				<div class="avg-review">
+					<p>Avg. review</p>
+					<div class="">
+						<h2><strong>{{x.avg_review_time}}</strong></h2>
+					</div>
+					<p>Hours</p>
+				</div>
+				<div class="avg-response">
+					<p>Avg. response</p>
+					<div class="">
+						<h2><strong>{{x.avg_response_time}}</strong></h2>
+					</div>
+					<p>Hours</p>
+				</div>
+			</div>
+		</div>
+		<div class="mentee-shuffle">							
+			<h4><strong> Mentees</strong></h4>
+			<%- include('../components/mentees_for_mentors.ejs') %>
+		</div>
+	</div>
+</div>

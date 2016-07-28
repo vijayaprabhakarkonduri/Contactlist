@@ -1,0 +1,45 @@
+<% if(user.type === 'mentor' || user.type === 'instructor' ) { %>
+<div class="no-padding col-md-10 col-sm-10">
+<% } %>
+<ul>
+	<li class="<% if(typeof page !== "undefined" && page == "dashboard") { %> active <% }%>"><a href="/dashboard">Dashboard</a></li>
+	
+	<li class="<% if(typeof page !== "undefined" && page == "curriculum") { %> active <% }%>"><a href="/curriculum">Curriculum</a></li>
+	
+	<!--<li class="<% if(typeof page !== "undefined" && page == "calendar") { %> active <% }%>"><a href="/calendar">Calendar</a></li>-->
+	
+	<% if(user.type === 'mentee') { %>
+	
+	<li class="<% if(typeof page !== "undefined" && page == "projects") { %> active <% }%>"><a href="/projects">Projects</a></li>
+
+	<% } else if(user.type === 'mentor') { %>
+	
+	<li class="<% if(typeof page !== "undefined" && page == "students") { %> active <% }%>"><a href="/students">Students</a></li>
+	<li class="<% if(typeof page !== "undefined" && page == "tasks_library") { %> active <% }%>"><a href="/library">Library</a></li>
+	
+	<% } else { %>
+	
+	<li class="<% if(typeof page !== "undefined" && page == "redflags") { %> active <% }%>"><a href="/redflags">Red Flags</a></li>
+	<li class="<% if(typeof page !== "undefined" && page == "tasks_library") { %> active <% }%>"><a href="/library">Library</a></li>
+	<li class="<% if(typeof page !== "undefined" && page == "students") { %> active <% }%>"><a href="/students">Students</a></li>
+	<li class="<% if(typeof page !== "undefined" && page == "mentorship") { %> active <% }%>"><a href="/mentorship">Mentorship</a></li>
+	
+	<% } %>
+</ul>
+<% if(user.type === 'mentor') { %>
+</div>
+<div class="row no-padding col-md-2 add-task col-sm-2">
+	<a href="#"><button class="btn" data-toggle="modal" data-target="#myModal" ng-click = 'getTaskList()'>ASSIGN TASK</button></a>
+</div>
+<% } %>
+
+<% if(user.type === 'instructor') { %>
+</div>
+<div class="row no-padding col-md-2 add-task col-sm-2">
+	<a href="#"><button class="btn" data-toggle="modal" data-target="#addbatch">ADD BATCH</button></a>
+</div>
+<% } %>
+
+
+
+

@@ -1,0 +1,85 @@
+<div class="modal fade" id="reportcard" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog popup" role="document">
+	    <div class="popup-content">
+			<div class="section-head">
+				<h3><img src="/css/images/reportcard.png" />Report Card</h3>
+			</div>
+			<div class="score-analysis">
+				<div class="score-analysis-text">
+					<div><h4>Peer Score</h4></div>
+					<div class="score-analysis-bar"></div>
+				</div>
+				<div class="score-analysis-ratings" >
+					<div class="score-analysis-rating" ng-repeat="x in artifacts_object">
+						<h2>{{x.deliverable}}</h2>
+						<h3>{{x.mentee_grade.grade}}</h3>
+					</div>
+				</div>
+			</div>
+			<div class="score-analysis">
+				<div class="score-analysis-text">
+					<div><h4>Negative Score Analysis</h4></div>
+					<div class="score-analysis-bar"></div>
+				</div>
+				<div class="score-analysis-ratings">
+					<div class="score-analysis-rating" ng-repeat="x in artifacts_object">
+						<h2>{{x.deliverable}}</h2>
+						<h3>{{x.score}}</h3>
+					</div>
+				</div>
+			</div>
+			<div class="score-analysis">
+				<div class="score-analysis-text">
+					<div><h4>Skills</h4></div>
+					<div class="score-analysis-bar"></div>
+				</div>
+				<div class="mentor-skill-gradings">
+					<div class="row">
+						<div class="col-md-4 no-padding">
+							<div class="">
+								<div class="carousel-grading">
+						            <ul rn-carousel rn-carousel-disable-touch rn-swipe-disabled  rn-carousel-locked rn-carousel-controls rn-carousel-transition="slide" rn-carousel-index="carouselIndex" rn-carousel-buffered class="carousel1">
+						                <li ng-repeat="grade in grading track by $index" ng-class="layer">
+						                	<h4>{{carouselIndex+1}} of {{grading.length}}</h4>
+						                	<div class="mentor-skill-grading-view">
+												<h4 class="carousel-text"><span>{{grade.skill}}</span></h4>
+												<div class="mentor-skill-grading-bar" id="green_{{carouselIndex+1}}" ng-click="tooltip(carouselIndex, $event)"></div>
+												<div class="mentor-skill-grading-text" id="grade_tooltip_{{carouselIndex+1}}">
+													<h4>{{grade.score}}</h4>
+												</div>
+											</div>
+						                </li>
+						            </ul>
+						        </div>
+								<!--<div class="mentor-skill-grading-view" ng-click="tooltip()">
+									<h4>
+										<img src="/css/images/back_2.png" />
+										<span>Information Architecture</span>
+										<img src="/css/images/back.png" />
+									</h4>
+									<div class="mentor-skill-grading-bar" id="green" ></div>
+									<div class="mentor-skill-grading-text" id="grade_tooltip">
+										<h4>0</h4>
+									</div>
+								</div>-->
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="mentor-skill-graded">
+								<!--<div class="ratingcircle" style="width:120px;height:120px;border-radius:60px;border:1px solid #000;"><h4 class="ng-binding">5.0</h4></div> -->
+								<div ng-repeat="grade in grading" class="ratingcircle" style="width:{{grade.score*15+30}}px;height:{{grade.score*15+30}}px;border-radius:{{(grade.score*15+30)/2}}px;border:1px solid #000;" ng-if="grade.score > 0" ><h4>{{grade.score}}</h4></div>
+							</div>
+						</div>
+					</div>
+					
+					<textarea placeholder="Feedback" ng-model="feedback"></textarea>
+				</div>
+			</div>
+
+			<button ng-click="saveProjectGrading()" data-dismiss="modal">Send</button>
+			<a href="#" data-dismiss="modal">Cancel</a>
+		</div>
+	</div>
+</div>
+
+

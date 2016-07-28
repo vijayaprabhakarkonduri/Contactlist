@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Dashboard</title>
+	<%- include('../partials/css_includes') %>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController">
+		<div class="header">
+			<div class="container-fluid">
+				<div class="row">
+					<%- include('../partials/header.ejs') %> 
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row page-body">
+				<div class="body-sections">
+					<div class="navigation">
+						<%- include('../partials/navigation.ejs') %>
+					</div>
+					<div class="row" ng-if="accept_task">
+						<%- include('../components/newtask_notification.ejs') %>
+					</div>
+					<div class="row">
+						<div class="col-md-7 no-padding">
+							<div class="body-section-layout ">
+								<div class="modal-header">
+									<span>
+										<img src="/css/images/notification.png">
+										<span class="modal-title-font"> <strong> Notifications</strong></span>
+									</span>	
+								</div>
+								<div>
+									<%- include('../components/instructor_notifications.ejs') %>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-5 redflag-section no-padding">
+							<div class="no-margin body-section-layout body-section-bottom-space">
+								<div class="modal-header">
+									<span>
+										<img src="/css/images/folder.png">
+										<span class="modal-title-font"> <strong> Red Flags</strong></span>
+									</span>	
+								</div>
+									<%- include('../components/instructor_redflags.ejs') %>
+								<div ng-if="redflags.length > 3">
+									<a href="/redflags" class="pull-right redflags-all">VIEW ALL</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="no-margin body-section-layout body-section-bottom-space">
+								<div class="modal-header">
+									<span>
+										<img src="/css/images/folder.png">
+										<span class="modal-title-font"> <strong> Mentor Reviews</strong></span>
+									</span>	
+								</div>
+								<%- include('../components/mentor_reviews.ejs') %>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include('../components/add_batch.ejs') %>
+	</div>
+	<%- include('../components/footer.ejs') %>
+	<%- include('../partials/js_includes') %>
+
+	<script>
+		//var myApp = angular.module('myApp', ['ngSanitize']);
+		myApp.controller('myController', ['$scope', 'myProfile', function($scope, myProfile){
+			$scope.accept_task = [],
+			$scope.passive_notification = [];
+
+			
+			myProfile.getProfile("<%= user._id %>", function(data) {
+				$scope.$apply(function () {
+					$scope.profile = data;
+				})
+			});
+
+			$scope.notifications = {
+				  "Notification": [
+				    {
+				      "name": "Nida Talveen",
+				      "status": "submitted",
+				      "project": "IRCTC",
+				      "time": "a minute ago",
+				      "last_update": "Last updated 2 days ago",
+				      "rating": "3.8",
+				      "id":"2",
+				      "artifacts": [
+								  {
+								    "artifactname": "Timelines",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Heuristics",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Research",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Design Brief",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Workflows",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Usecases",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Lo-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Hi-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Visuals",
+								    "status": "done"
+								  }
+								],
+				      "mentor": "Spoorthy Ethamukkala",
+				      "id":"1",
+				      "comments": [
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        },
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"I like the thought process",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        }
+				      ]
+				    },
+				    {
+				      "name": "Ravindra",
+				      "status": "started",
+				      "project": "PAN CARD",
+				      "time": "an hour ago",
+				      "last_update": "Last updated 3 days ago",
+				      "id":"2",
+				      "rating": "",
+				      "artifacts": [
+								  {
+								    "artifactname": "Timelines",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Heuristics",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Research",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Design Brief",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Workflows",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Usecases",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Lo-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Hi-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Visuals",
+								    "status": "done"
+								  }
+								],
+				      "mentor": "Spoorthy Ethamukkala",
+				      "id":"2",
+				      "comments": [
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        },
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        }
+				      ]
+				    },
+				    {
+				      "name": "Jyothirmai",
+				      "status": "workflows",
+				      "project": "BLUECROSS",
+				      "time": "an hour ago",
+				      "last_update": "Last updated 4 days ago",
+				      "id":"2",
+				      "rating": "",
+				      "artifacts": [
+								  {
+								    "artifactname": "Timelines",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Heuristics",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Research",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Design Brief",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Workflows",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Usecases",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Lo-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Hi-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Visuals",
+								    "status": "done"
+								  }
+								],
+				      "mentor": "Spoorthy Ethamukkala",
+				      "id":"3",
+				      "comments": [
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        },
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        }
+				      ]
+				    },
+				    {
+				      "name": "Nagalakshmi",
+				      "status": "started",
+				      "project": "FLIPKART",
+				      "time": "an two hours ago",
+				      "last_update": "Last updated 5 days ago",
+				      "id":"2",
+				      "rating": "",
+				      "artifacts": [
+								  {
+								    "artifactname": "Timelines",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Heuristics",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Research",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Design Brief",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Workflows",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Usecases",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Lo-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Hi-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Visuals",
+								    "status": "done"
+								  }
+								],
+				      "mentor": "Anurag Duddu",
+				      "id":"4",
+				      "comments": [
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        },
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        }
+				      ]
+				    },
+				    {
+				      "name": "Nagalakshmi",
+				      "status": "started",
+				      "project": "FLIPKART",
+				      "time": "an two hours ago",
+				      "last_update": "Last updated 6 days ago",
+				      "id":"2",
+				      "rating": "",
+				      "artifacts": [
+								  {
+								    "artifactname": "Timelines",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Heuristics",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Research",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Design Brief",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Workflows",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Usecases",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Lo-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Hi-Fi Prototypes",
+								    "status": "done"
+								  },
+								  {
+								    "artifactname": "Visuals",
+								    "status": "done"
+								  }
+								],
+				      "mentor": "Anurag Duddu",
+				      "id":"5",
+				      "comments": [
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        },
+				        {
+				          "name": "Spoorthy Ethamukkala",
+				          "time": "3 minutes ago",
+				          "image": "",
+				          "message":"Lookout for more inspirations and try to incorporate branding consistently across the pages",
+				          "replies": [
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            },
+				            {
+				              "name": "Nida Talveen",
+				              "time": "3 minutes ago",
+				              "image": "",
+				              "reply": "Sure will do that :)."
+				            }
+				          ]
+				        }
+				      ]
+				    }
+				  ]
+			}
+			/*$scope.redflags = {
+			    "redflag": [
+			        {
+			            "name": "Ravindra Kastala",
+			            "project": "FLIPKART",
+			            "time": "Last updated 2 days ago",
+			            "mentor": "Ramanujan Mada",
+			            "image": "/css/images/ravindra.png",
+			            "id":2,
+			            "description":"Shes is unable to excute what she has promised in the design brief even after so many feedbacks and majorly she is breaking at the level of workflows. we need to talk so I raised the flag"
+			        },
+			        {
+			            "name": "Nagalakshmi Yarra",
+			            "project": "BLUECROSS",
+			            "time": "Last updated 26 Jan 2016",
+			            "mentor": "Pradeep Narvaneni",
+			            "image": "/css/images/nagalakshmi.png",
+			            "id":2,
+			            "description":"Shes is unable to excute what she has promised in the design brief even after so many feedbacks and majorly she is breaking at the level of workflows. we need to talk so I raised the flag"
+			        },
+			        {
+			            "name": "Sairam Mogullapalli",
+			            "project": "IRCTC",
+			            "time": "Last updated 29 Dec 2016",
+			            "mentor": "Vinay Draksharam",
+			            "image": "/css/images/msairam.png",
+			            "id":2,
+			            "description":"Shes is unable to excute what she has promised in the design brief even after so many feedbacks and majorly she is breaking at the level of workflows. we need to talk so I raised the flag"
+			        },
+			        {
+			            "name": "Jyothirmai Challagon",
+			            "project": "PAN CARD",
+			            "time": "Last updated 15 Jan 2016",
+			            "mentor": "Nithin Motupalli",
+			            "image": "/css/images/jyothi.png",
+			            "id":2,
+			            "description":"Shes is unable to excute what she has promised in the design brief even after so many feedbacks and majorly she is breaking at the level of workflows. we need to talk so I raised the flag"
+			        }
+			    ]
+			}*/
+			$scope.mentor_reviews = {
+				    "mentor_review": [
+				        {
+				            "name": "Anurag Duddu",
+				            "created": "Mohan Goud",
+				            "project": "FLIPKART",
+				            "rating": "3.8",
+				            "avg_review_time": "4",
+				            "avg_response_time": "3",
+				            "image":"/css/images/anurag.png"
+				        },
+				        {
+				            "name": "Pradeep Narvaneni",
+				            "created": "Jyothirmai Challagonda",
+				            "project": "PANCARD",
+				            "rating": "3.8",
+				            "avg_review_time": "4",
+				            "avg_response_time": "3",
+				            "image":"/css/images/pradeep.png"
+				        },
+				        {
+				            "name": "Nithin Motupalli",
+				            "created": "Nagalakshmi Yarra",
+				            "project": "IRCTC",
+				            "rating": "3.8",
+				            "avg_review_time": "4",
+				            "avg_response_time": "3",
+				            "image":"/css/images/nitin.png"
+				        }
+				    ]
+			}
+
+			$scope.fields = [{
+			    email: ""
+			}, {
+			    email: ""
+			}, {
+			    email: ""
+			}];
+
+			$scope.add = function() {
+				$scope.fields.push({
+			        email: ""
+			    });
+			};
+			$scope.remove = function(index) {
+				if($scope.fields.length >3) {
+					$scope.fields.splice(index, 1)
+				}
+			};
+			$scope.check = function ($event) {
+				$($event.target).parent().parent().removeClass('ongoing');
+				$($event.target).parent().parent().addClass('checked');	
+				$($event.target).hide();
+				$($event.target).status = 'checked';		
+			}
+			$scope.uncheck = function ($event) {
+				$($event.target).parent().parent().removeClass('checked');
+				$($event.target).parent().parent().addClass('ongoing');	
+				$($event.target).hide();
+				$($event.target).status = 'ongoing';	
+			}
+			$scope.showReply = function (event) {
+				if ($(event.target).parent().find('.replies').css('display') == 'none') {
+					$(event.target).parent().find('.replies').show();
+					$(event.target).css('background',"url('/css/images/triangle_open.png') no-repeat center right");
+				} else {
+					$(event.target).parent().find('.replies').hide();
+					$(event.target).css('background',"url('/css/images/triangle_close.png') no-repeat center right");
+				}
+			}
+			$scope.displayComments = function (event) {
+				console.log($(event.target).parent().parent().parent().parent().find('.all-comments').css('display'));
+				if ($(event.target).parent().parent().parent().parent().find('.all-comments').css('display') == 'none') {
+					$(event.target).parent().parent().parent().parent().find('.all-comments').show();
+				} else {
+					$(event.target).parent().parent().parent().parent().find('.all-comments').hide();
+				}
+			}
+
+
+			$scope.getAllInstructorNotifications = function() {
+				getAllInstructorNotifications(function(result){
+					for(n = 0; n < result.length; n++){
+						if(!result[n].type){					
+							$scope.$apply(function () {
+								$scope.passive_notification.splice(0, 0, result[n]);
+					        });
+						} else if(result[n].type == "toassign" || result[n].type == "addtask" || result[n].type == "extend_timelines") {						
+							$scope.$apply(function () {
+								result[n].description = htmlDecode(result[n].description);
+								$scope.accept_task.push(result[n]);
+					        });
+					        
+					        $('.view-less').hide();
+							$('.view-less-link').hide();
+						}
+						/*if( result[n].type == "toassign"){
+							$scope.$apply(function () {
+								result[n].description = htmlDecode(result[n].description);
+								$scope.accept_task.push(result[n]);
+					        });
+					        
+					        $('.view-less').hide();
+							$('.view-less-link').hide();
+						}*/
+					}
+					
+				});	
+			}
+
+			$scope.viewMore =  function($event) {
+				$(event.target).parent().find('.view-less').fadeIn('slow');
+				$(event.target).parent().find('.view-less-link').fadeIn('slow');
+				$(event.target).parent().find('.view-more-link').hide();
+			}
+
+			$scope.viewLess = function($event) {
+				$(event.target).parent().find('.view-less').hide();
+			    $(event.target).parent().find('.view-less-link').hide();
+			    $(event.target).parent().find('.view-more-link').fadeIn('slow');
+			}
+
+
+			$scope.acceptTask = function(index, $event) {
+				var task_id = $scope.accept_task[index];
+				var new_id = '';
+				var task = {
+					"task_name": task_id.task_name,
+					"short_description": task_id.short_description,
+					"skills_required": task_id.skills_required,
+					"task_details": htmlEncode(task_id.description),
+					"mentor_id":task_id.mentor_id,
+				};
+				addTask(task,function(result){
+					var result = result.replace(/['"]+/g, '');
+					new_id = result;
+
+					if(task_id.type == "toassign") {
+						var assign_task = {
+							"task_id": new_id,
+							"type":"new project",
+							"mentor_id" : task_id.mentor_id
+						}
+						console.log(assign_task);
+						modifyAssignTask(assign_task);
+
+						getUserName(task_id.mentor_id,function(result) {
+							$scope.createProjectPassiveNotification(result);
+						})
+						$scope.createProjectPassiveNotification = function(mentor_id){
+							/*var notificationData = {
+								"name": mentor_id,
+								"image": "/css/images/vaibhav.png",
+								"message": "Assigned " + $scope.assign_task_id + " Project for " + $scope.menteeNameAndId.length +" members" ,
+								"time": getDate(new Date()),
+								"to": "instructor"
+							};
+							createProjectPassiveNotification(notificationData);*/
+						}
+					}
+				});
+				notificationToMentor(task,function(result){
+					discardNotification(result.msg);
+				});
+				discardNotification(task_id._id);
+				
+				$(event.target).parent().parent().parent().hide();
+			};
+
+			$scope.discardTask = function(index,$event) {
+				for($scope.i=0;$scope.i<$scope.accept_task.length;$scope.i++){
+					if(index == $scope.accept_task[$scope.i]._id){
+						$scope.notification_id = $scope.i;
+					}
+				}
+				var task_id = $scope.accept_task[$scope.notification_id];
+					
+				discardNotification(task_id._id);
+				$(event.target).parent().parent().parent().hide();
+			}
+
+			$scope.addBatch = function() {
+				//console.log( $scope.fields);
+				addBatch($scope.last_batch, angular.toJson($scope.fields));
+				$scope.global_message = {
+					"project_name": $scope.assign_task_id,
+					"message": " task has been assigned to ",
+					"to": $('.mentee_mail').val()
+				}
+				console.log($scope.global_message);
+				$('.global-notifications').show();
+				$('.global-notifications').delay( 4000 ).fadeOut( 400 );
+			};
+
+			$scope.getLastBatch = function() {
+				getLastBatch(function(result){
+					$scope.$apply(function () {
+						$scope.last_batch = parseInt(result)+1;
+						//console.log($scope.last_batch);
+			        });
+				});
+			};
+
+			$scope.redflags = [];
+			$scope.getRedFlagsList = function() {
+				getRedFlagsList('123',function(result){					
+					$scope.$apply(function () {
+						$scope.redflags = result;
+						if($scope.redflags.length > 4){
+				        	$scope.redflags.length  = 4;
+				        }
+						for(i=0; i < $scope.redflags.length && i<4; i++){
+							//$scope.getUserName($scope.redflags[i].mentor_id,i,'mentor');
+							$scope.getUserName($scope.redflags[i].mentee_id,i,'mentee');
+							console.log(i);
+						}
+			        });			        			      
+				});
+			};
+
+			$scope.redflag_mentees =[];
+			$scope.getUserName = function(user_id,index,user) {
+				getUserName(user_id, function(result){
+					$scope.$apply(function(){
+						$scope.user_name = result;
+						console.log($scope.user_name);
+						//console.log($scope.user_name,index);
+						$scope.redflag_mentees.push({
+							"Project" : $scope.redflags[index].project,
+							"Project_id" : $scope.redflags[index].project_id,
+							"Time" : $scope.redflags[index].time,
+							"mentee_name": $scope.user_name,
+							"mentor": $scope.redflags[index].mentor
+						})
+						console.log($scope.redflag_mentees);
+					}); 
+					
+				});
+			};
+
+    		$scope.getRedFlagsList();
+    		$scope.getLastBatch();
+			$scope.getAllInstructorNotifications();
+
+			
+		}]);
+	</script>
+</body>
+</html>

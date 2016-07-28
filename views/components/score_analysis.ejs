@@ -1,0 +1,13 @@
+<div class="score-analysis-text">
+	<div><h4>Score Analysis</h4></div>
+	<div class="score-analysis-bar"></div>
+</div>
+
+<div class="score-analysis-ratings">
+	<div class="score-analysis-rating" ng-repeat="artifacts in artifacts_object">
+		<h2>{{artifacts.deliverable}}</h2>
+		<h3>{{artifacts.score}}</h3>
+	</div>
+	
+	<img src="/css/images/expand.png" ng-click="hideReportCard()" />
+</div>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Profile</title>
+	<%- include('../partials/css_includes') %>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController">
+		<div class="header">
+			<div class="container-fluid">
+				<div class="row">
+					<%- include('../partials/header.ejs') %> 
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row page-body">
+				<div class="body-sections no-margin">
+					<div class="navigation">
+						<%- include('../partials/navigation.ejs') %>
+					</div>
+					<div class="row margin">
+						<%- include('../components/global_notifications.ejs') %>
+					</div>
+					<div class="col-md-6">
+						<%- include('../components/profile.ejs') %>
+					</div>
+					<div class="col-md-6">
+						<%- include('../components/graph.ejs') %>
+					</div>					
+					<div ng-if="usertype == 'mentee'">
+						<%- include('../components/archieved_projects.ejs') %>
+					</div>					
+				</div>
+				<%- include('../components/add_batch.ejs') %>
+				<%- include('../components/assign_task.ejs') %>
+			</div>
+		</div>
+	</div>
+<%- include('../partials/js_includes') %>
+<script>
+	myApp.controller('myController', ['$scope', 'Upload', 'myProfile', function($scope, Upload, myProfile){
+
+		/* myProfile is a service defined in ng-controller.js for get Profile data. */
+		myProfile.getProfile("<%= user._id %>", function(data) {
+			$scope.$apply(function () {
+				$scope.profile = data;
+			})
+		});
+
+
+		$scope.notificationlist = {
+					"list": [
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "3 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Will you review my flowcharts",
+							  "time": "3 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hey lets meet in conference",
+							  "time": "10 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Your goal for the page is something not matched with the outcome",
+							  "time": "2 minutes ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "2 minutes ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "2 minutes ago"
+							}
+			]
+		}
+
+		//This data will come from api
+		$scope.skillset = {
+			categories: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"],
+			series: [{
+				name: "Expected",
+				data: [1,2,3,4,5,6,7,3],
+				color: '#97ab56'
+			}, {
+				name: "You",
+				data: [4,5,6,7,3,1,2,3],
+				color: '#2995c5'
+			}]
+		};
+		$scope.skillSetMap = function () {
+			skillMap($scope.skillset);			
+		};
+
+		$scope.skillSetMap();
+		$scope.fields = [
+				{
+					email: ""
+				},
+				{
+					email: ""
+				},
+				{
+					email: ""
+				}
+		];
+		$scope.add = function() {
+			$scope.fields.push({
+		        email: ""
+		    });
+		};
+		$scope.remove = function(index) {
+			if($scope.fields.length >3) {
+				$scope.fields.splice(index, 1)
+			}
+		};	
+
+		$scope.getProfile = function(user) {//get the user profile
+			var username = user;
+			console.log(username);
+            getProfile(username, function (result) { 
+                $scope.$apply(function() {
+                	$scope.profile_details = result;
+                	if($scope.profile_details.Mentor_id){
+                		$scope.getUserName($scope.profile_details.Mentor_id)
+                	}
+
+                	if($scope.profile.image) $scope.profile_details.image = $scope.profile.image;
+                });
+            })
+        }
+
+
+
+
+
+        //This function will get the user name by the User ID 
+        $scope.getUserName = function(mentor_id){
+			var id = mentor_id;
+
+			//This call the function in the controller page
+			getUserName(id, function(result){
+				var mentor_name = result;
+				$scope.$apply(function(){
+					$scope.mentor_name = mentor_name;
+				});
+			});
+		}
+
+
+		//This function will update the profile of the user
+		$scope.updateProfile = function(){
+			var obj = {
+            	"user_id": '<%=user._id%>', 
+            	"user_name": $scope.profile_details.Name,
+            	"phone_number": $scope.profile_details.Phone_Number,
+            	"email_id": $scope.profile_details.Email_ID,
+            	"personal_email_id": $scope.profile_details.Personal_Email_ID
+            }
+
+			
+			if(typeof $scope.file == "undefined") {
+				updateProfile( angular.toJson(obj) );
+			} else {
+				uploadProfileImage(Upload, $scope.file, '<%=user._id%>', function(result) {
+					obj.image = result;
+					updateProfile( angular.toJson(obj) );
+				});	
+			}
+ 
+ 			$('.profile-view').show();
+ 			$('.edit-profile.profile-view').removeAttr('style');
+
+			//window.location.reload();
+
+			//Gives the global notification taht profile hass been updated sucessfully
+			$scope.global_message = {
+				"project_name": "",
+				"message": "Profile Updated sucessfully",
+				"to": ""
+			}
+			$('.global-notifications').show();
+			$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+		}
+
+       	var url = (document.URL);
+       	$scope.user = url = url.split("/").pop();
+       	
+       	$scope.getProfile($scope.user);
+
+       	if('<%=user.username%>' === $scope.user){
+       		$scope.usertype="mentor";
+       	}else{
+       		$scope.usertype="mentee";
+       	}
+       	
+       	//this functuion will get all the mentor list in the users collection
+   		$scope.getAllMentorslist = function(){
+			getAllMentorslist(function(result){
+				$scope.$apply(function(){
+					$scope.mentor_list = result;
+				});
+			});
+		}
+
+
+		//This function share the profile with the other mentors 
+		$scope.shareProfile = function(){
+			var i;
+			$scope.obj = [];
+			console.log('<%=user._id%>');
+
+			//create the objects for each mentor id. 
+			for(i=0; i<$scope.mentor_id.length; i++){
+				$scope.obj.push({
+					"mentor_id" : $scope.mentor_id[i],
+					"from": '<%=user._id%>',
+					"type":"shareprofile",
+					"mentee_username" :$scope.user
+				})
+			}
+
+			//calling thre share profile function the controller page.
+           	shareProfile( angular.toJson($scope.obj) );
+			window.location.reload();
+
+			//displays the global message for the sucesssful sharing profile
+			$scope.global_message = {
+				"project_name": $scope.user,
+				"message": "Profile shared with" + $scope.mentor_id.length + "mentors successfully",
+				"to": ""
+			}
+			$('.global-notifications').show();
+			$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+		}
+
+		$scope.mentor_id =[];
+		var mentorlength=0;
+		$scope.getMentorId = function(id,status,index){
+			if(status==1){
+				$scope.mentor_id.push(id)				
+				mentorlength++;	
+			}else{
+				$scope.mentor_id.splice(index,1)				
+			}			
+		}
+		$scope.editbutton = function(){
+			$('.profile-new').hide();
+			$('.edit-profile').show();	
+		}
+		$scope.backbutton = function(){
+			$('.profile-new').show();
+			$('.edit-profile').hide();	
+		}
+		
+		$scope.getAllMentorslist();
+	}]);
+	
+</script>	
+</body>
+</html>

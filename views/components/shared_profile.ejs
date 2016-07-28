@@ -1,0 +1,14 @@
+<div class="peer-review-request" ng-repeat="x in user_names">
+	<h2>
+		<strong>{{x.mentor_name}}</strong> 
+		 shared 
+		<a href="/{{x.mentee_user_name}}">
+			<strong>{{x.mentee_name}}</strong>
+		</a> 
+		 profile for 
+		 <a href="/{{x.mentee_user_name}}">
+			<strong>{{x.project_name}}</strong>
+		</a>
+		with you.
+	</h2>
+</div> 

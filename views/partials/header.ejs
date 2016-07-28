@@ -1,0 +1,69 @@
+<div class="no-padding col-xs-3 logo">
+	<a href="/dashboard"><img src="/css/images/logo_uxd.png" /></a>
+</div>
+<div class="col-md-9 no-padding">
+<% if(typeof user !== 'undefined') { %>	
+	<div class="profile">
+		
+		<div class="chat-icon">
+			<a href="/discussions"><img src="/css/images/chat.png" /></a>
+		</div>
+		<div class="notifications">
+			<span class="user-option"></span>
+			<div class="user-options">
+				<div class="discussion-tile clearfix" ng-repeat="x in passive_notification" ng-if = " '<%= user.type %>' == 'instructor'">
+					<img ng-src="{{x.image}}">
+					<span>
+						<div class="notification-person">
+							<p><strong>{{x.name}}</strong>  <strong>{{x.message}}</strong></p>
+						</div>
+						<div class="pull-right discussion-time">
+							<h5>{{x.time}}</h5>
+						</div>
+					</span>
+				</div>
+				<div class="discussion-tile clearfix" ng-repeat="x in mentor_passive_notification" ng-if = " '<%= user.type %>' == 'mentor'">
+					<img ng-src="{{x.image}}">
+					<span>
+						<div class="notification-person">
+							<p><strong>{{x.name}}</strong>  <strong>{{x.message}}</strong></p>
+						</div>
+						<div class="pull-right discussion-time">
+							<h5>{{x.time}}</h5>
+						</div>
+					</span>
+				</div>
+				<div class="discussion-tile clearfix" ng-repeat="x in mentee_passive_notification" ng-if = " '<%= user.type %>' == 'mentee'">
+					<img ng-src="{{x.image}}">
+					<span>
+						<div class="notification-person">
+							<p><strong>{{x.mentee_message}}</strong></p>
+						</div>
+						<div class="pull-right discussion-time">
+							<h5>{{x.time}}</h5>
+						</div>
+					</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="profile-img">
+			<a href="/<%= user.username %>">
+				<img ng-src="{{profile.image}}" ng-if="profile.image" title="{{profile.name}}" />
+				<div class="user-icon-placeholder" ng-if="!profile.image">{{('<%= user.name %>')[0]}}</div>
+			</a>
+
+			<a href="/<%= user.username %>"><span class="user"><%= user.name %></span></a>
+			
+			<span class="user-option"></span>
+			<div class="user-options">
+				<ul>
+					<li><a class="profile-icon" href="/<%= user.username %>">Profile</a></li>
+					<li><a class="logout-icon" href="/logout">Log out</a></li>
+				</ul>
+			</div>
+		</div>
+    </div>
+<% } %>    
+</div>
+

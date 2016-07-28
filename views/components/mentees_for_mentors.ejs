@@ -1,0 +1,11 @@
+<div ng-repeat="y in x.mentees">
+	<div class="mentee-shuffled" ng-class="{'draggable-mentee':y.name}" style="display:inline-block" >
+		<div class="mentees-images" ng-if="y.image"><img ng-src="{{y.image}}" /></div>
+		<input type="hidden" value="{{x.id}}" class="mentor-id">
+		<input type="hidden" value="{{y.id}}" class="mentee-id">
+		<div class="mentees-images_border middle" ng-if="y.name && !y.image">{{y.name[0]}}</div>
+		<div class="mentees-images_border middle" ng-if="!y.name">+</div>
+		<span class="mentee-shuffle-name" ng-if="y.name">{{y.name}}</span>
+		<span class="mentee-shuffle-name" ng-if="!y.name">Add mentee</span>
+	</div>
+</div>

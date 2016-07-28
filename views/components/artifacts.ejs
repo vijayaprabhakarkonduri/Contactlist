@@ -1,0 +1,45 @@
+<div class="row">
+	<div class="col-md-3 no-padding">
+		<div class="artifact" >
+			<a href="/timelines_view/<%= project_id%>">
+				<div class="project-heading">
+					<h2><img src="/css/images/design brief.png" />Timelines</h2>
+					<div class="underline"></div>
+					<span>Last updated on {{project_last_update}}</span>
+					<p class="versions" ng-repeat="y in x.versions"><span></span>{{y.version}}</p>					
+				</div>				
+			</a>
+		</div>
+	</div>
+	<div class="col-md-3 no-padding" ng-repeat="x in artifacts_object track by $index" ng-click="redirect(x.deliverable, x.review_status)">
+		<div class="artifact" >
+			<div>
+				<div class="project-heading">
+					<h2><img src="/css/images/design brief.png" />{{x.deliverable}}</h2>
+					<div class="underline"></div>
+					<span>Last updated on {{x.last_update}}</span>
+					<p class="versions" ng-repeat="y in x.versions track by $index"><span></span>Version {{$index+1}}</p>
+					<a href="#"  ng-click="getdata(x.deliverable)" ng-if="x.review_status != 'ongoing' && !completed" style="display:block;margin-top:15px;" data-toggle="modal" data-target="#myModal" >+ Add</a>
+				</div>
+				<div class="col-md-offset-8 pull-right" ng-if = "x.mentee_grade && !completed">
+					<p>Peer Rating</p>
+					<div class="peer-rating">
+						<h2><strong>{{x.mentee_grade.grade}}</strong></h2>
+					</div>
+				</div>
+				<div class="col-md-offset-8 pull-right" ng-if = "x.mentor_grade">
+					<p>Mentor Rating</p>
+					<div class="peer-rating">
+						<h2><strong>{{x.mentor_grade.grade}}</strong></h2>
+					</div>
+				</div>
+				<span class="pull-right artifact-reviewbutton " >
+					<p ng-if="x.review_status == 'ongoing'"><i>Review going on</i></p>
+					<button type="submit" class="pull-right btn btn-primary review-button" data-toggle="modal" data-target="#peerreview" ng-if="x.review_status == 'request' && x.review_status != 'ongoing'  && x.review_status != 'completed'">
+					  <a href="" ng-click="peerReviewModel($index)">Peer Review</a><img src="/css/images/peer_review_arrow.png" />
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

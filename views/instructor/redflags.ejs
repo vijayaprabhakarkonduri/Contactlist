@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Redflag</title>
+	<%- include('../partials/css_includes') %>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController">
+		<div class="header">
+			<div class="container-fluid">
+				<div class="row"><%- include('../partials/header.ejs') %> </div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row page-body">
+				<div class="body-sections">
+					<div class="navigation">
+						<%- include('../partials/navigation.ejs') %>
+					</div>
+					<div class="col-md-12 body-section-layout row">
+						<%- include('../components/redflags.ejs') %>
+					</div>
+				</div>
+				<%- include('../components/add_batch.ejs') %>
+			</div>
+		</div>
+	</div>
+	<%- include('../components/footer.ejs') %>
+	<%- include('../partials/js_includes') %>
+	<script>
+		
+		myApp.controller('myController', ['$scope', 'myProfile', function($scope, myProfile){
+
+			/* myProfile is a service defined in ng-controller.js for get Profile data. */
+			myProfile.getProfile("<%= user._id %>", function(data) {
+				console.log(data);
+				$scope.$apply(function () {
+					$scope.profile = data;
+				})
+			});	
+			/*$scope.redflag = [
+						    {
+						    "studentimage": "/css/images/redflag1.png",
+						    "studentname": "Jyothirmai Challagonda",
+						    "projectname": "FLIPKART",
+						    "escalated": "Vinay Draksharam",
+						    "time":"2 days ago",
+						    "id":"2",
+						    "statement":"She is unable to execute what she has promissed in the design brief even after so many feedbacks and majorly she is breaking down at the level of Workflows. We need to talk so I raised the flag.",
+						    "mentorname": "Ramanujan Mada",
+						    "buttonurl":""
+						  },
+						  {
+						    "studentimage": "/css/images/redflag2.png",
+						    "studentname": "Nagalakshmi Yarra",
+						    "projectname": "PANCARD",
+						    "escalated": "Vinay Draksharam",
+						    "time":"3 days ago",
+						    "id":"2",
+						    "statement":"She is unable to execute what she has promissed in the design brief even after so many feedbacks and majorly she is breaking down at the level of Workflows. We need to talk so I raised the flag.",
+						    "mentorname": "Pradeep Narvaneni",
+						    "buttonurl":""
+						  },
+						{
+						    "studentimage": "/css/images/redflag3.png",
+						    "studentname": "Ravindra Kastala",
+						    "projectname": "BLUECROSS",
+						    "escalated": "Vinay Draksharam",
+						    "time":"4 days ago",
+						    "id":"2",
+						    "statement":"She is unable to execute what she has promissed in the design brief even after so many feedbacks and majorly she is breaking down at the level of Workflows. We need to talk so I raised the flag.",
+						    "mentorname": "Ramanujan Mada",
+						    "buttonurl":""
+						  },
+						  {
+						    "studentimage": "/css/images/redflag4.png",
+						    "studentname": "Sairam Mogullapalli",
+						    "projectname": "IRCTC",
+						    "escalated": "Nithin Motupalli",
+						    "time":"5 days ago",
+						    "id":"2",
+						    "statement":"She is unable to execute what she has promissed in the design brief even after so many feedbacks and majorly she is breaking down at the level of Workflows. We need to talk so I raised the flag.",
+						    "mentorname": "Ramanujan Mada",
+						    "buttonurl":""
+						  },
+						  {
+						    "studentimage": "/css/images/redflag3.png",
+						    "studentname": "Ravindra Kastala",
+						    "projectname": "BLUECROSS",
+						    "escalated": "Vinay Draksharam",
+						    "time":"4 days ago",
+						    "id":"2",
+						    "statement":"She is unable to execute what she has promissed in the design brief even after so many feedbacks and majorly she is breaking down at the level of Workflows. We need to talk so I raised the flag.",
+						    "mentorname": "Ramanujan Mada",
+						    "buttonurl":""
+						  },
+						  {
+						    "studentimage": "/css/images/redflag4.png",
+						    "studentname": "Sairam Mogullapalli",
+						    "projectname": "IRCTC",
+						    "escalated": "Nithin Motupalli",
+						    "time":"5 days ago",
+						    "id":"2",
+						    "statement":"She is unable to execute what she has promissed in the design brief even after so many feedbacks and majorly she is breaking down at the level of Workflows. We need to talk so I raised the flag.",
+						    "mentorname": "Ramanujan Mada",
+						    "buttonurl":""
+						  }
+			]*/
+			$scope.notificationlist = {
+					"list": [
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "3 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Will you review my flowcharts",
+							  "time": "3 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hey lets meet in conference",
+							  "time": "10 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Your goal for the page is something not matched with the outcome",
+							  "time": "2 minutes ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "2 minutes ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "2 minutes ago"
+							}
+				]
+			}
+			$scope.fields = [
+				{
+					email: ""
+				},
+				{
+					email: ""
+				},
+				{
+					email: ""
+				}
+			];
+			$scope.add = function() {
+				$scope.fields.push({
+			        email: ""
+			    });
+			};
+			$scope.remove = function(index) {
+				if($scope.fields.length >3) {
+					$scope.fields.splice(index, 1)
+				}
+			};
+
+			$scope.redflags = [];
+			$scope.getRedFlagsList = function() {
+				getRedFlagsList('123',function(result){		
+					console.log(result);			
+					$scope.$apply(function () {
+						$scope.redflags = result;
+						if($scope.redflags.length > 4){
+				        	$scope.redflags.length  = 4;
+				        }
+						for(i=0; i < $scope.redflags.length && i<4; i++){
+							//$scope.getUserName($scope.redflags[i].mentor_id,i,'mentor');
+							$scope.getUserName($scope.redflags[i].mentee_id,i,'mentee');
+							console.log(i);
+						}
+			        });			        			      
+				});
+			};
+
+			$scope.redflag_mentees =[];
+			$scope.getUserName = function(user_id,index,user) {
+				getUserName(user_id, function(result){
+					$scope.$apply(function(){
+						$scope.user_name = result;
+						console.log($scope.user_name);
+						//console.log($scope.user_name,index);
+						$scope.redflag_mentees.push({
+							"Project" : $scope.redflags[index].project,
+							"Project_id" : $scope.redflags[index].project_id,
+							"Time" : $scope.redflags[index].time,
+							"mentee_name": $scope.user_name,
+							"mentor": $scope.redflags[index].mentor,
+							"reason": $scope.redflags[index].reason
+						})
+						console.log($scope.redflag_mentees);
+					}); 
+					
+				});
+			};
+
+
+    		$scope.getRedFlagsList();
+		}]);
+	</script>	
+</body>
+</html>

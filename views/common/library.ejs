@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Task Library</title>
+	<%- include('../partials/css_includes') %>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController">
+		<div class="header">
+			<div class="container-fluid">
+				<div class="row">
+					<%- include('../partials/header.ejs') %> 
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row page-body">
+				<div class="body-sections no-margin">
+					<div class="navigation">
+						<%- include('../partials/navigation.ejs') %>
+					</div>
+					<div class="row margin">
+						<%- include('../components/global_notifications.ejs') %>
+					</div>
+					<div class="zero-padding body-section-layout no-margin row">
+						<div class="col-md-4 top-spacings">
+							<button type="button" class="btn btn-primary task-assign new-task-button">
+							  <img src="/css/images/plus-medium.png" class=""> <span>NEW TASK</span>
+							</button>
+							<div class="divider-line"></div>
+							<div class="library-tasks">
+								<%- include('../components/tasks.ejs') %>
+							</div>
+						</div>
+						<div class="col-md-8 top-spacings">
+							<div class="task-view">
+								<%- include('../components/task_view.ejs') %>
+							</div>
+							<div class="task-form hideclass">
+								<%- include('../components/task_form.ejs') %>
+							</div>
+						</div>
+							
+					</div>
+				</div>
+				<%- include('../components/assign_task.ejs') %>
+			</div>
+		</div>
+	</div>
+	<%- include('../components/footer.ejs') %>
+	<%- include('../partials/js_includes') %>
+<script>
+
+	myApp.controller('myController', ['$scope', 'myProfile', function($scope, myProfile){
+		
+		/* myProfile is a service defined in ng-controller.js for get Profile data. */
+		myProfile.getProfile("<%= user._id %>", function(data) {
+			$scope.$apply(function () {
+				$scope.profile = data;
+			})
+		});
+	//var myApp = angular.module('myApp', ['ui.tinymce', 'ngSanitize']);
+	//myApp.controller('myController', ['$scope', function($scope){
+		
+		$scope.addTask = function() {
+
+			//Validation 
+			var task = {
+				"task_name": $scope.task_name,
+				"short_description": $scope.short_description,
+				"skills_required": $scope.skills_required,
+				"task_details": htmlEncode($scope.task_details)
+			};
+			
+			//Invoke Add Task controller function.
+			addTask(task);
+
+			window.location.reload();
+		};
+
+		$scope.sendToInstructor = function() {
+			//Validation 
+			var task_details = {
+				"task_name": $scope.task_name,
+				"short_description": $scope.short_description,
+				"skills_required": $scope.skills_required,
+				"description": htmlEncode($scope.task_details),
+				"mentor_id":"<%=user._id%>",
+				"mentor_name": '<%=user.name%>',
+				"type" : "addtask",
+				"to":"instructor"
+			};
+			//Invoke notificationToInstructor controller function.
+			console.log(task_details);
+			notificationToInstructor(task_details);
+			//window.location.reload();
+			$scope.global_message = {
+				"project_name": task_details.task_name,
+				"message": " task has been sent to Instructor for approval ",
+				"to": ""
+			}
+			console.log($scope.global_message);
+			$('.global-notifications').show();
+			$('.global-notifications').delay( 8000 ).fadeOut( 400 );
+		};
+
+		$scope.getTask = function() {
+			getTasksList(function(result){
+				$scope.task_list = result; 
+				$scope.showTaskDetail($scope.task_list[0]); 
+			});	
+		}
+		
+
+		$scope.showTaskDetail = function(task) {
+			console.log(task.id);
+			$scope.selected = task;
+
+			/*$.each($scope.task_list, function(idx, elem) {
+				if(elem.id === task.id) {
+					$scope.task = {
+						"title": elem.title,
+						"description": htmlDecode(elem.task_details)
+					}
+				}
+			})*/
+			$scope.task = {
+				"title": task.title,
+				"description": htmlDecode(task.task_details)
+			}
+		}
+
+		$scope.isActive = function(item) {
+		    return $scope.selected === item;
+		};
+
+		/*$scope.tinymceOptions = {
+		    //plugins: 'link image code',
+		    toolbar: 'alignleft aligncenter alignright | bold italic  | fontsizeselect | fontname',
+		    fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt' ,
+		    //font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;AkrutiKndPadmini=Akpdmi-n'
+		};*/
+
+		$scope.tinymceOptions = {
+			selector: 'textarea',
+			toolbar: 'fontsizeselect fontselect styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent link strikethrough',
+			font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;AkrutiKndPadmini=Akpdmi-n',
+			plugins: "link textcolor",
+			menubar:false,
+    		statusbar: false,
+	  	};
+	  	
+		$scope.getTask();
+
+
+	}]);
+	
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<div class="row">
+ 	<div class="section-head">
+ 		<h3><img src="/css/images/folder.png" />NON GRADED FILES</h3>
+ 	</div>
+ 	<div class="col-md-3 no-padding">
+ 		<div class="artifact" >
+ 			<a href="/timelines_view/<%= project_id%>">
+ 				<div class="project-heading">
+ 					<h2><img src="/css/images/design brief.png" />Timelines</h2>
+ 					<div class="underline"></div>
+ 					<span>Last updated on {{project_last_update}}</span>
+ 					<p class="versions" ng-repeat="y in x.versions"><span></span>{{y.version}}</p>					
+ 				</div>				
+ 			</a>
+ 		</div>
+ 	</div>
+ 	<div class="col-md-3 no-padding" ng-repeat="x in artifacts_object" ng-show=" !(x.mentor_grade)">
+ 		<div class="artifact">
+ 			<div class="project-heading">
+ 				<h2><img src="/css/images/design brief.png" />{{x.deliverable}}</h2>
+ 				<div class="underline"></div>
+ 				<span>{{x.last_update}}</span>
+ 				<p class="versions" ng-repeat="y in x.versions"><span></span>version</p>
+ 			</div>
+ 			<span class="pull-right artifact-reviewbutton " ng-if="x.versions && x.name != 'TIMELINES'">
+ 				<a href="/negative_marking/{{x.deliverable}}/<%= project_id %>">
+ 					<button type="" class="pull-right btn btn-primary review-button"  >
+ 						Grade Now
+ 						<img src="/css/images/peer_review_arrow.png" />
+ 					</button>
+ 				</a>
+ 			</span>
+ 		</div>
+ 	</div>
+ </div>
+ <div class="row section-head">
+ 	<h3><img src="/css/images/folder.png" />GRADED FILES</h3>
+ 	<div ng-if="next" class="pull-right">
+ 		<button class="btn btn-primary review-button"  data-toggle="modal" data-target="#reportcard">Next</button></a>
+ 	</div>
+ </div>
+ <div class="clearfix col-md-3 no-padding" ng-repeat="x in artifacts_object"  ng-show="x.mentor_grade">
+ 	<div class="artifact">
+ 		<div class="project-heading">
+ 			<h2><img src="/css/images/design brief.png" />{{x.deliverable}}</h2>
+ 			<div class="underline"></div>
+ 			<span>{{x.last_update}}</span>
+ 			<p class="versions" ng-repeat="y in x.versions"><span></span>version</p>
+ 		</div>
+ 		<div class="gradedartifact_rating row">
+ 			<div class="pull-right">
+ 				<p>Avg Score</p>
+ 				<div class="peer-rating">
+ 					<h2><strong>{{x.mentor_grade.grade}}</strong></h2>
+ 				</div>
+ 			</div>
+ 		</div>
+ 	</div>
+ </div>

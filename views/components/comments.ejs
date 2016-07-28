@@ -1,0 +1,28 @@
+<div class="all-comments">
+	<p ng-if="!(comments)">Start commenting </p>
+	<div class="comment-body" ng-repeat="z in comments track by $index">
+		<img src="/css/images/profile.png" class="commentor-image">
+		<div class="comment-text" >
+			<span class="commentor-name">{{z.name}}</span>
+			<span class="comment-time" >({{z.time}})</span>
+			<p class="comment">{{z.message}}</p>
+			<p class="reply" ng-click="showReply($event)">Reply ({{z.replies.length}})</p>
+			<div  class="replies">
+				<div ng-repeat="a in z.replies">
+					<img src="/css/images/profile.png" class="commentor-image">
+					<div class="comment-text" >
+						<span class="commentor-name">{{a.name}}</span>
+						<span class="comment-time" >({{a.time}})</span>
+						<p class="comment">{{a.reply}}</p>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12 input-group no-padding">
+					<input type="text" class="comment-length form-control input-reply" ng-model="x.reply" class="" />
+					<div class="">
+						<button class="rightbuttonintext" ng-click="postReply($event, $index, x.reply)">Reply</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

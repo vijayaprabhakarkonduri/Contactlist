@@ -1,0 +1,31 @@
+<div class="less-artifact-projecttile" ng-repeat= "x in student_projects"> 
+	<div class="project-tiles-status">
+		<div class=" no-margin other-students-status other-students-status1 task-details-layout notification-body">
+			<img class="student-status1" ng-src="{{x.image}}">
+			<div class="other-students mentee-task">
+				<h4 class="notification-subject">{{x.mentee_name}}</h4>
+				<a href="/project_artifacts/{{x.projects[0].project_id}}">
+					<div class="student-task-details">
+						<div class="pull-right">
+							<p class="task-deadline">{{x.projects[0].deadline}}</p>
+						</div>
+						<div class="task-name">
+							<h4 class="each-task-name">{{x.projects[0].name}}</h4>
+							<div></div>	
+							<p class="mentee-last-used" >{{x.projects[0].last_update}}</p>
+						</div>		
+						<div class="clearfix">							 
+							<div class="task-status">
+								<div class="artifact-name"  ng-repeat="y in x.projects[0].artifacts">
+									<span ng-if="y.status=='done'"><img  src="/css/images/tick.png"></span>
+									<span>{{y.artifact}}</span>
+								</div>
+							</div>	
+						</div>					
+					</div>
+				</a>	
+			</div>
+		</div>
+	</div>
+</div>
+

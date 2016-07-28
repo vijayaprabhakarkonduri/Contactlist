@@ -1,0 +1,59 @@
+<div class="redflag-mentee">
+	<div class="student-task-details">
+		<div class="project" ng-if="ongoing_project" ng-click="redirect(ongoing_project.project_id)">
+			<div class="first-project-heading project-heading">
+				<h2>{{ongoing_project.name}}</h2>
+				<div class="underline"></div>
+				<span>{{ongoing_project.last_update}}</span>
+			</div>
+			<div class="pull-right">
+				<p class="task-deadline no-margin">{{ongoing_project.deadline}}</p>
+				<p class="mentee-last-used no-padding">{{ongoing_project.timefordeadline}}</p>
+			</div>
+			<div class="mentor-skill-grading">
+				<div class="mentor-skill-status-bar" style="width:{{(ongoing_project.doneartifacts/ongoing_project.artifacts.length)*100}}%" data-toggle="tooltip"  title="{{currentproject.tasklist[5].task}}" data-placement="bottom"></div>
+			</div>
+			<div class="task-status">
+				<div class="artifact-name projects-page-status" ng-repeat="x in ongoing_project.artifacts">
+					<span class="tick_width">
+						<span ng-if="x.status=='done'">
+							<img src="/css/images/tick.png" />
+						</span>
+					</span>
+					<span>{{x.artifact}}</span>
+				</div>
+			</div>
+			<div class="mentorreview-button review-work">
+				<img src="/css/images/mentor.png">
+				<span>{{currentproject.mentor}}</span>
+				<button type="submit" class="pull-right btn btn-primary review-button" data-toggle="modal" data-target="#sendtomentor" ng-if="project_status" ng-click="getAllMentees(ongoing_project.project_id, ongoing_project.name, $event)">
+					<a href="" >Mentor Review</a><img src="/css/images/peer_review_arrow.png" />
+				</button>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="project" ng-if="recent_project" ng-click="redirect(recent_project.project_id)">
+			<div class="first-project-heading project-heading">
+				<h2>{{recent_project.name}}</h2>
+				<div class="underline"></div>
+				<span>{{recent_project.last_update}}</span>
+			</div>
+			<div class="first-project-rating">
+				<span>avg. score</span>
+				<h1 class="no-margin">{{recent_project.rating}}</h1>
+				<span>out of 5.0</span>
+			</div>
+			<div class="first-project-score clearfix">
+				<div class="artifact-score" ng-repeat="y in recent_project.marks">
+					<p>{{y.artifact}}</p>
+					<h1>{{y.grade}}</h1>
+				</div>
+			</div>
+			<div class="first-mentor-name">
+				<img src="/css/images/mentor.png" />
+				<span>{{recent_project.mentor}}</span>
+			</div>
+		</div>
+	</div>
+</div>

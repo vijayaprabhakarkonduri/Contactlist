@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Dashboard</title>
+	<%- include('../partials/css_includes') %>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController" >
+		<div class="header">
+			<div class="container-fluid">
+				<div class="row"><%- include('../partials/header.ejs') %> </div>
+			</div>
+		</div>
+		<div class="container-fluid"> 
+			<div class="row page-body">
+			<div class="body-sections">
+				<div class="navigation">
+					<%- include('../partials/navigation.ejs') %>
+				</div>
+				<div class="row">
+					<div class="no-padding">
+						<%- include('../components/global_notifications.ejs') %>
+						<div class="row " ng-if="peer_review">
+							<%- include('../components/acceptpeer_review.ejs') %>
+						</div>
+						<div class="row " ng-if="sharedprofile">
+							<%- include('../components/shared_profile.ejs') %>
+						</div>
+						<div class="extend-timelines clearfix" ng-if="extendtimelines">
+							<%- include('../components/timeline_extension.ejs') %>
+							<div class="col-md-6">
+								<div class="col-md-12 projects_mentor">
+									<%- include('../components/project_status.ejs') %>
+								</div>
+								<div class="col-md-12">
+									<%- include('../components/graph.ejs') %>
+								</div>
+							</div>
+							<div class="col-md-12 pull-right extension-button">
+							    <button class="pull-right review-button send-button-task">
+						        	<a href="#" ng-click="cancelExtension()" class="button">Not Approved</a>
+						      	</button>
+						      	<a href="#" ng-click="cancelExtension()"class="pull-right secondary-action">Send to Instructor </a>
+						    </div>
+						</div>
+					</div>
+					<div class="col-md-12 body-section-layout no-padding">
+						<div class="task-status-view">
+							<%- include('../components/mentees_progress.ejs') %>
+						</div>	
+					</div> <!-- Mentee's Progress -->
+					<div class="row">
+						<div class="col-md-4 body-section-layout">
+							<%- include('../components/todo.ejs') %>
+						</div>
+						<div class="no-padding col-md-8">
+							<div class="body-section-layout">
+								<div class=" no-margin task-status-view" >
+									<div class="to-do-head section-head">
+										<h3><img src="/css/images/folder.png" />Student Projects</h3>
+									</div>
+									<div class="task-status-tiles">
+										<%- include('../components/task_status.ejs') %>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%- include('../components/assign_task.ejs') %>
+			</div>
+			</div>
+
+	</div>
+		<%- include('../components/footer.ejs') %>
+	</div>
+<%- include('../partials/js_includes') %>
+<script>
+	//var myApp = angular.module('myApp', ['ui.tinymce', 'ngSanitize']);
+	//myApp.controller('myController', ['$scope', function($scope){
+
+	myApp.controller('myController', ['$scope', 'Upload', 'myProfile', function($scope, Upload, myProfile){
+
+		/* myProfile is a service defined in ng-controller.js for get Profile data. */
+		myProfile.getProfile("<%= user._id %>", function(data) {
+			$scope.$apply(function () {
+				$scope.profile = data;
+			})
+		});
+
+
+		$scope.user_id = "<%= user._id %>";
+		$scope.mentor_passive_notification = [];
+		
+		$scope.todolist = {
+		    "name": "To Do List",
+		    "date": "18th Feb",
+		    "list": [
+		        {
+		            "do": "PAN Card Wireframes submission",
+		            "time": "12:00 PM",
+		            "status": "checked"
+		        },{
+		            "do": "Meeting with Pradeep",
+		            "time": "2:00 PM",
+		            "status": "ongoing"
+		        },
+		        {
+		            "do": "PAN Card Lo-Fi Wireframes",
+		            "time": "3:00 PM",
+		            "status": "ongoing"
+		        },
+		        {
+		            "do": "PAN Card peer review with Bala Narasimha",
+		            "time": "4:00 PM",
+		            "status": "ongoing"
+		        },
+		        {
+		            "do": "PAN Card changes",
+		            "time": "5:00 PM",
+		            "status": "ongoing"
+		        }
+		    ]
+		}
+		
+		$scope.currentproject = {
+		    "name": "PAN CARD",
+		    "lastused": "Last updated 2 days ago",
+		    "deadline":"27th Feb, 2015",
+		    "timefordeadline":"5 Days to go",
+		    "tasklist": [
+		    	{
+		    		"task":"Timelines",
+		    		"status":'done'
+		    	},{
+		    		"task":"Heuristics",
+		    		"status":'done'
+		    	},{
+		    		"task":"Research",
+		    		"status":'done'
+		    	},{
+		    		"task":"Flowcharts",
+		    		"status":'done'
+		    	},{
+		    		"task":"Workflows",
+		    		"status":'done'
+		    	},
+		    	{
+		    		"task":"Prototypes",
+		    		"status":'done'
+		    	},
+	    	],
+		    "mentor":"Ramanujan Mada",
+		    "totalartifacts":"10"
+		}
+		$scope.notificationlist = {
+					"list": [
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "3 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Will you review my flowcharts",
+							  "time": "3 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hey lets meet in conference",
+							  "time": "10 hrs ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Your goal for the page is something not matched with the outcome",
+							  "time": "2 minutes ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "2 minutes ago"
+							},
+							{
+							  "image": "/css/images/user_male_circle.png",
+							  "lastmessage": "Hi can you come online",
+							  "time": "2 minutes ago"
+							}
+			]
+		}
+		
+		$scope.skillset = {
+			categories: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"],
+			series: [{
+				name: "Expected",
+				data: [1,2,3,4,5,6,7,3],
+				color: '#97ab56'
+			}, {
+				name: "You",
+				data: [4,5,6,7,3,1,2,3],
+				color: '#2995c5'
+			}]
+		};
+
+		//Mentee's Progress
+		$scope.menteesProgress = {
+			categories: ['FAILURE', 'CRITICAL', 'MAY BE', 'DELAYED', 'ON SCHEDULE'],
+			series: [{
+	            data: [{
+	            	name: "jill",
+	            	x: 0,
+	            	y: 7,
+	            	z: 25
+	            }, {
+	            	name: "jack",
+	            	x: 1,
+	            	y: 17,
+	            	z: 25
+	            }, {
+	            	name: "john",
+	            	x: 4,
+	            	y: 6,
+	            	z: 25
+	            }],
+	        }]
+		};
+
+		$scope.suggestions = [{
+			"message": "First Slide:: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.",
+			"action": "Schedule"
+		},{
+			"message": "Second Slide:: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem.",
+			"action": "Schedule"
+		},{
+			"message": "Third Slide:: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem.",
+			"action": "Schedule"
+		}]
+		$scope.currentprojectlength = $scope.currentproject.tasklist.length;
+
+		//Mentee's Progress
+		$scope.menteesProgressMap = function() { //Define
+			progressMap($scope.menteesProgress);
+		};
+		
+		$scope.skillSetMap = function () {
+			skillMap($scope.skillset);			
+		}
+		
+		//$scope.skillSetMap($scope.menteesProgress);
+		$scope.menteesProgressMap(); //Invoke
+		
+		$scope.redirect = function() {
+		    window.location = '/profile';
+		}
+		$scope.taskgrade = function() {
+		    window.location = '/projects';
+		}
+		$scope.check = function (event,index) {
+			$(event.target).parent().parent().removeClass('ongoing');
+			$(event.target).parent().parent().addClass('checked');	
+			$scope.todolist.list[index].status = 'checked';	
+		}
+		$scope.uncheck = function (event,index) {
+			$(event.target).parent().parent().removeClass('checked');
+			$(event.target).parent().parent().addClass('ongoing');	
+			$scope.todolist.list[index].status = 'ongoing';
+		}
+		$scope.notReview = function (project_id,task,owner_name,owner_id) {
+			console.log(project_id,task,owner_name,owner_id);
+			cancleMentorReview(project_id);
+			$('.peer-review-request').hide();
+			$scope.global_message = {
+				"project_name": "You",
+				"message": "have Ignored the review request",
+				"to": ""
+			}
+			$('.global-notifications').show();
+			$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+			var notificationData = {
+				"name": '<%= user.name %>',
+				"image": "/css/images/vaibhav.png",
+				"mentee_id":owner_id,
+				"message": " did not accepted the " + owner_name + "'s Mentor Review request of " + task + " project ",
+				"mentee_message": " did not accepted your Mentor Review request for" +  task,
+				"time": getDate(new Date()),
+				"to": "instructor",
+				"toMentee":"yes"
+			};
+			console.log(notificationData);
+			createProjectPassiveNotification(notificationData);
+
+		};
+
+
+		$scope.cancelExtension = function () {
+			$('.extend-timelines').hide();
+		}
+
+		$scope.getMentorNotifications = function() {
+			var mentor_id = '<%=user._id%>';
+			console.log(mentor_id);
+			getMentorNotifications(mentor_id, function(result){
+				console.log(result);				
+				$scope.sharedprofile = [];
+				$scope.user_names = [];
+			});
+			getMentorNotifications(mentor_id, function(result){		
+				console.log(result);		
+				for (var i = 0; i < result.length; i++) {
+					if (result[i].type == "shareprofile") {
+						$scope.$apply(function(){
+							console.log(result[i]);
+							
+						});
+					} else if (result[i].type == "mentor review") {
+						$scope.$apply(function () {
+							$scope.peer_review = {
+								"owner_id": result[i].owner_id,
+								"owner_name": result[i].owner_name,
+								"task": result[i].task,
+								"project_id":result[i].project_id,
+								"message" : result[i].description,
+								"link": 'projectgrading/' + result[i].project_id
+							};
+				        });
+					} else if(result[i].toMentor == "yes"){
+						$scope.$apply(function () {
+								$scope.mentor_passive_notification.splice(0, 0, result[i]);
+					    });
+					}
+					//console.log($scope.mentor_passive_notification);
+				};
+			});
+		}
+
+
+
+		$scope.skillSetMap = function () {
+			/*$scope.skillSetMap = function () {
+				skillMap($scope.skillset);	
+				skillMap($scope.skillset);	
+			}*/
+		}
+		$scope.suggestion = "";
+		$scope.suggestSkillKey = function() {
+			//var skill = $scope.suggestion;
+			//if (skill) {
+				//suggestSkillKey(skill,function(result){
+					//$scope.assistance = result;
+				//});
+				//suggestTask(skill,function(result){
+					
+				//});	
+			//}
+			$scope.assistanceTask = 1;
+		}
+		$scope.skill_tags = [];
+		$scope.addTag = function  (skill) {
+			$scope.skill_tags.push({
+				"skill" : skill
+			})
+			$scope.tags_input = "";
+		}
+
+		$scope.getTaskList = function() {
+			getTasksList(function(result){
+				$scope.task_list = result; //Invoke List Task controller function.
+			});
+			getSkills(function(result){
+				console.log(result);
+				$scope.skills = result; //Invoke List Task controller function.
+			});
+
+		}
+
+		$scope.fillTaskDetails = function($event, task_id, name) {
+			var id = task_id;
+			$scope.task_id = id;
+			$scope.assign_task_id = name;
+			$('.selected').removeClass('selected');
+			$(event.target).parent().addClass('selected');
+			$(event.target).parent().parent().parent().parent().find('.each-task').hide();
+		}
+
+		$scope.getMenteeNotifications = function() {
+			var id = '<%=user._id%>';
+			getMenteeNotifications(id,function(result){
+				//console.log(result);
+				for (var i = 0; i < result.length; i++) {
+					if (result[i].type == "peer review") {
+						$scope.$apply(function () {
+							$scope.mentor_review.push({
+								"name" : result[i].owner_name,
+								"mentee_user_name": 'negative_marking/' + result[i].artifact_name + '/' + result[i].project_id,
+							});
+						});
+					} else {
+						$scope.$apply(function () {
+							
+				        });
+					}
+				}
+				
+			});	
+		}
+				
+		$scope.submitAssignTask = function  () {
+
+			var mentees = ($(".tag-input-ctn").text()).split('×');
+			mentees.pop();
+			console.log(mentees);
+			$scope.mentee_id = [];
+			for (var i = 0; i < mentees.length; i++) {
+				getMenteeByusername(mentees[i],(function(result){
+					$scope.$apply(function () {
+						$scope.mentee_id.push({
+			                "id": result[0].id,
+			                "name": result[0].name
+	            		})
+						if($scope.mentee_id.length == mentees.length){
+							$scope.getMenteeId($scope.mentee_id);	
+						}
+	            		
+			        });
+			        
+				}));
+			}
+			$scope.getMenteeId = function  (id) {
+				$scope.menteeNameAndId = id;
+					if ($scope.another_task_name || $scope.another_short_description || $scope.another_skills_required || $scope.another_task_details) {
+						var task_details = htmlEncode($scope.another_task_details);
+						var task = {
+							"task_name": $scope.another_task_name,
+							"short_description": $scope.another_short_description,
+							"skills_required": $scope.another_skills_required,
+							"task_details": task_details,
+							"mentor_name": '<%=user.name%>',
+							"mentor_id":'<%=user._id%>',
+							"type":"new project",
+							"to":"instructor"
+						};
+					
+						for (var i = 0; i < $scope.menteeNameAndId.length; i++) {
+							var task = {
+								"task_name": $scope.another_task_name,
+								"mentee_id": $scope.menteeNameAndId[i].id,
+								"mentee_name": $scope.menteeNameAndId[i].name,
+								"mentor_id":'<%=user._id%>',
+								"mentor_name": '<%=user.name%>',
+								"type":"pending",
+								"to":"instructor"
+							}
+							
+							assignTask(task);
+						}
+						var new_task = {
+							"task_name": $scope.another_task_name,
+							"short_description": $scope.another_short_description,
+							"skills_required": $scope.another_skills_required,
+							"description": task_details,
+							"mentor_id":'<%=user._id%>',
+							"to":"instructor",
+							"type":"toassign",
+							"mentor_name":'<%=user.name%>'
+						};
+						console.log(new_task);
+						notificationToInstructor(new_task);
+						$scope.global_message = {
+							"project_name": task.task_name,
+							"message": " need approve from instructor ",
+							"to": ""
+						}
+						$('.global-notifications').show();
+						$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+					} else {
+						for (var i = 0; i < $scope.menteeNameAndId.length; i++) {
+							var task = {
+								"task_name": $scope.assign_task_id,
+								"task_id": $scope.task_id,
+								"mentee_id": $scope.menteeNameAndId[i].id,
+								"mentee_name": $scope.menteeNameAndId[i].name,
+								"mentor_id":'<%=user._id%>',
+								"mentor_name": '<%=user.name%>',
+								"type":"new project",
+								"to":"instructor"
+							}
+							/*
+							for (var i = 0; i < $scope.menteeNameAndId.length; i++) {
+								task.mentee_id = $scope.menteeNameAndId[i].id;
+								task.mentee_name = $scope.menteeNameAndId[i].name;
+							}*/
+							assignTask(task);
+
+						}
+
+						var notificationData = {
+							"name": '<%= user.name %>',
+							"image": "/css/images/vaibhav.png",
+							"message": "Assigned " +$scope.assign_task_id + " Project for " + $scope.menteeNameAndId.length +" members" ,
+							"time": getDate(new Date()),
+							"to": "instructor",
+						};
+						createProjectPassiveNotification(notificationData);
+
+						$scope.global_message = {
+							"project_name": $scope.assign_task_id,
+							"message": " task has been assigned to ",
+							"to": $scope.menteeNameAndId.length + "  members"
+						}
+						console.log($scope.global_message);
+						$('.global-notifications').show();
+						$('.global-notifications').delay( 4000 ).fadeOut( 400 );
+					}
+			}
+		}
+
+		
+		$scope.getAllMentees = function  () {
+			var user_type = 'mentee';
+			getAllMentees(user_type,function(result){
+				$scope.all_mentees = result;
+			});	
+		}
+		
+		//This function will get all mentors list of the mentor
+		$scope.getAssignedMentees = function  () {
+			var user_id = '<%=user._id%>';
+			getAssignedMentees(user_id, function(result){
+				$scope.assigned_mentees = result;
+				console.log(result);
+				if($scope.assigned_mentees[0]){
+					if($scope.assigned_mentees[0].users.length>0){
+						for(var i=0; i<$scope.assigned_mentees[0].users.length; i++){
+							$scope.getMyProjects($scope.assigned_mentees[0].users[i]._id);
+						}
+					}
+				}
+			});	
+		}
+
+		$scope.student_projects = [];
+
+		$scope.getMyProjects = function (mentee_id) {
+			getUserName(mentee_id, function(result){
+				$scope.$apply(function(){
+					$scope.mentee_name = result;
+				});	
+			})
+			console.log(mentee_id,"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+			getMyProjects(mentee_id,  function(result){
+				console.log(result);
+				if(result != ""){
+					$scope.student_projects.push({
+						"projects" : result,
+						"mentee_name" : $scope.mentee_name, 
+					});
+					console.log($scope.student_projects);
+					console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+					
+				}
+			});
+		}
+
+		$scope.autofill_mentee_username = function($event, mentee_id, mentee_mail,mentee_name) {
+			$scope.mentee_id = mentee_id;
+			var mentee_mail = mentee_mail;
+			$scope.mentee_name = mentee_name;
+			$('.mentee_mail').val(mentee_mail);
+			$(event.target).hide();				
+		}
+
+
+		$scope.sharedProfileDetails = function () {
+			//console.log('<%=user._id%>');
+			sharedProfileDetails('<%=user._id%>', function(result){	
+				//console.log(result)	
+
+
+			});
+		}
+
+		//$scope.getMyProjects();
+		$scope.sharedProfileDetails();
+		$scope.getMentorNotifications();
+		$scope.getAllMentees();
+		$scope.getAssignedMentees();
+		
+		return $scope.all_mentees = [];
+	}]);
+
+	myApp.directive('tagInput', function() {
+        return {
+            scope: {
+                inputTags: '=taglist',
+                autocomplete: '=autocomplete'
+            },
+            link: function ($scope, element, attrs) {
+                $scope.defaultWidth = 220;
+                $scope.tagText = '';
+                if ($scope.autocomplete) {
+                    $scope.autocompleteSelect = function (event, ui) {
+                        $scope.$apply('tagText=\'' + ui.item.value + '\'');
+                        $scope.$apply('addTag()');
+                        return false;
+                    };
+                    $(element).find('input').autocomplete({
+                        minLength: 0,
+                        source: function (request, response) {
+                            var item;
+                            return response(function () {
+                                var i, len, ref, results;
+                                ref = $scope.autocomplete;
+                                results = [];
+                                for (i = 0, len = ref.length; i < len; i++) {
+                                    item = ref[i];
+                                    if (item.toLowerCase().indexOf(request.term.toLowerCase()) !== -1) {
+                                        results.push(item);
+                                    }
+                                }
+                                //window.CP.exitedLoop(1);
+                                return results;
+                            }());
+                        },
+                        select: function (_this) {
+                            return function (event, ui) {
+                                return $scope.autocompleteSelect(event, ui);
+                            };
+                        }(this)
+                    });
+                }
+                $scope.tagArray = function () {
+                    if ($scope.inputTags === undefined) {
+                        return [];
+                    }
+                    return $scope.inputTags.split(',').filter(function (tag) {
+                        return tag !== '';
+                    });
+                };
+                $scope.addTag = function () {
+                    if ($scope.tagText.length === 0) {
+                        return;
+                    }
+                    $scope.tags = $scope.tagArray();
+                    $scope.tags.push($scope.tagText);
+                    $scope.inputTags = $scope.tags.join(',');
+					console.log($scope.tags);
+                    return $scope.tagText = '';
+                };
+                $scope.deleteTag = function (key) {
+                    var tagArray;
+                    tagArray = $scope.tagArray();
+                    if (tagArray.length > 0 && $scope.tagText.length === 0 && key === undefined) {
+                        tagArray.pop();
+                    } else {
+                        if (key !== undefined) {
+                            tagArray.splice(key, 1);
+                        }
+                    }
+                    return $scope.inputTags = tagArray.join(',');
+                };
+                $scope.$watch('tagText', function (newVal, oldVal) {
+                    var tempEl;
+                    if (!(newVal === oldVal && newVal === undefined)) {
+                        tempEl = $('<span>' + newVal + '</span>').appendTo('body');
+                        $scope.inputWidth = tempEl.width() + 5;
+                        if ($scope.inputWidth < $scope.defaultWidth) {
+                            $scope.inputWidth = $scope.defaultWidth;
+                        }
+                        return tempEl.remove();
+                    }
+                });
+                element.bind('keydown', function (e) {
+                    var key;
+                    key = e.which;
+                    if (key === 9 || key === 13) {
+                        e.preventDefault();
+                    }
+                    if (key === 8) {
+                        return $scope.$apply('deleteTag()');
+                    }
+                });
+                return element.bind('keyup', function (e) {
+                    var key;
+                    key = e.which;
+                    if (key === 9 || key === 13 || key === 188) {
+                        e.preventDefault();
+                        return $scope.$apply('addTag()');
+                    }
+                });
+            },
+            template: '<div class=\'tag-input-ctn\'><div class=\'input-tag\' data-ng-repeat="tag in tagArray()">{{tag}}<div class=\'delete-tag\' data-ng-click=\'deleteTag($index)\'>&times;</div></div><input type=\'text\' data-ng-style=\'{width: inputWidth}\' data-ng-model=\'tagText\' /></div>'
+        };
+
+
+    });
+</script>	
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Negative marking sheet</title>
+	<%- include('../partials/css_includes') %>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController">
+		<div class="header">
+			<div class=" row container-fluid">
+				<div>
+					<%- include('../partials/header.ejs') %>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid clearfix">
+			<div class="row page-body">
+				<div class="body-sections">
+					<div class="navigation">
+						<%- include('../partials/navigation.ejs') %>
+					</div>
+					<div class="row">
+						<%- include('../components/global_notifications.ejs') %>
+						<%- include('../components/negative_marking_sheet.ejs') %>
+					</div>
+					<div class="timelines-view-body">
+						<div class="section-head">
+							<h3><img src="/css/images/garbage.png" />Notes</h3>
+						</div>
+						<div class="comments_negativemarking">
+							<%- include('../components/comments.ejs') %>
+							<div class="col-md-12 col-xs-12 input-group no-padding">
+								<input type="text" class="comment-length form-control" ng-model="comment" />
+								<div class="">
+									<button class="rightbuttonintext" ng-click="postComment()">Comment</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include('../components/assign_task.ejs') %>
+		<%- include('../components/add_batch.ejs') %>
+	</div>
+	<%- include('../components/footer.ejs') %>
+	<%- include('../partials/js_includes') %>
+	<script>
+
+		myApp.controller('myController', ['$scope', 'myProfile', function($scope, myProfile){
+
+			/* myProfile is a service defined in ng-controller.js for get Profile data. */
+			myProfile.getProfile("<%= user._id %>", function(data) {
+				$scope.$apply(function () {
+					$scope.profile = data;
+				})
+			});	
+
+			var grade = 0;
+			$scope.remove = function(index) {
+				if($scope.fields.length >3) {
+					$scope.fields.splice(index, 1)
+				}
+			};
+			$scope.tooltip = function(){
+				var left = $('.ui-slider-range').css('width').split('p');
+				var total_left = $('.mentor-skill-grade-bar').css('width').split('p');
+				var space = left[0]-35;
+				var rating = parseFloat(((left[0]/total_left[0])*100)/20).toFixed(1);
+				$('.mentor-skill-grade-tooltip').css('left',space+'px');
+				$('.mentor-skill-grade-tooltip h2').text(rating);
+			}
+			$scope.getRating = function(){
+				$scope.rating_status = $('.mentor-skill-grade-tooltip h2').text();
+			}
+			$scope.left = $('.ui-slider-range').width();
+			$scope.total_marks= $scope.total = 0;
+
+			$scope.addMarks = function(event, marks){
+				
+				var text = $(event.target).parent().parent().parent().find('.duration').text();
+				var value = $(event.target).parent().find('input').val();
+				var total = marks * (parseInt(value)+1);
+				$(event.target).parent().parent().parent().find('.duration').text(total);
+				$(event.target).parent().find('input').val(parseInt(value)+1);
+				$scope.total = $scope.total + parseInt(marks);
+			}
+
+			$scope.changeMarks = function(count, marks){
+				console.log(count);
+				console.log(marks);
+				var text = $(event.target).parent().parent().parent().find('.duration').text();
+				var value = $(event.target).parent().find('input').val();
+				var total = marks * (parseInt(count));
+				$(event.target).parent().parent().parent().find('.duration').text(total);
+				var score = 0;
+				$("tr.timelines_row").each(function() {
+					score = score + Number($(this).find("td.duration").text());
+				});
+				$scope.total = score;
+			}
+
+			$scope.subtractMarks = function(event, marks){
+			
+				var text = $(event.target).parent().parent().parent().find('.duration').text();
+				var value = $(event.target).parent().find('input').val();
+				var total = marks * (parseInt(value)-1);
+				if (parseInt(value) <= 0) {
+					$(event.target).parent().find('input').val('0');
+				}else {
+					$(event.target).parent().parent().parent().find('.duration').text(total);
+					$(event.target).parent().find('input').val(parseInt(value)-1);
+					$scope.total = $scope.total - parseInt(marks);
+				}
+			}
+			$scope.startTimer = function (){
+			    var timer = setInterval(function(){ 
+			     	if ($scope.seconds) {
+			     		$scope.seconds = $scope.seconds -1;
+			     		$('#seconds').text($scope.seconds);
+			     	}else if(!($scope.seconds) && $scope.mins) {
+			     		$scope.mins = $scope.mins - 1;
+			     		$scope.seconds = 60 -1;
+			     		$('#mins').text($scope.mins);
+			     		$('#seconds').text($scope.seconds);
+			     	}else {
+			     		clearInterval(timer);
+			     	}
+			    }, 1000);
+
+			};
+
+			$scope.startTimer();
+
+	        $scope.showReply = function (event) {
+				if ($(event.target).parent().find('.replies').css('display') == 'none') {
+					$(event.target).parent().find('.replies').show();
+					$(event.target).css('background',"url('/css/images/triangle_open.png') no-repeat center right");
+				} else {
+					$(event.target).parent().find('.replies').hide();
+					$(event.target).css('background',"url('/css/images/triangle_close.png') no-repeat center right");
+				}
+			}
+
+			$scope.saveGrade = function() {
+				if ($scope.owner_id == '<%= user._id %>') {
+					return false;
+				}
+				var total_mins= i = 0;
+				var issues = [];
+				$("tr.timelines_row").each(function() {
+					var factor = {
+						"issue" : $scope.negativemarking.issues[i].issue,
+						"score" : $(this).find("td.duration").text()
+					}
+					issues.push(factor);
+					i++;
+				});
+				var data = {
+					"peer_id" : '<%=user._id%>',
+					"grade" : $scope.rating_status,
+					"marks" : issues
+
+				}
+				if('<%=user.type%>' == "mentee"){
+					saveGrade('<%= artifact %>', '<%= project_id %>', data, function(result){	
+					
+					});	
+				}else if('<%=user.type%>' == "mentor"){
+					saveMentorGrade('<%= artifact %>', '<%= project_id %>', data, function(result){	
+					
+					});
+				}
+
+				getMenteeIdByProjectId('<%= project_id%>',function(id) {
+					$scope.mentee_id = id;
+					getUserName($scope.mentee_id,function(result){
+						$scope.mentee_name = result;
+						$scope.sendPeerReviewPassiveNotification($scope.mentee_name,id);
+					});
+				})
+
+				$scope.sendPeerReviewPassiveNotification = function(mentee_name,id){
+					getMentorIdByMenteeId(id,function(result){
+						$scope.mentor_id = result;
+						var notificationData = {
+							"name": '<%= user.name %>',
+							"image": "/css/images/vaibhav.png",
+							"mentee_id":$scope.mentee_id,
+							"mentor_id": $scope.mentor_id,
+							"message": " given" + $scope.rating_status + " rating for " + '<%= artifact %>' +" in peerReview to " + mentee_name,
+							"mentee_message": " you got " + $scope.rating_status + " rating for " + '<%= artifact %>' +" in peerReview from " +"<%= user.name %>",
+							"time": getDate(new Date()),
+							"to": "instructor",
+							"toMentor":"yes",
+							"toMentee":"yes"
+						};
+						getUserName($scope.mentor_id,function(result){
+							$scope.mentor_name = result;
+							if('<%=user.type%>' == "mentor"){
+								notificationData.mentee_message = " you got " + $scope.rating_status + " rating for " + '<%= artifact %>' +" in Mentor Review from " +$scope.mentor_name;
+								delete notificationData.toMentor;
+							}
+						});
+						console.log(notificationData);
+						$scope.global_message = {
+							"project_name": "Grade",
+							"message": " has been sent to",
+							"to": mentee_name
+						}
+						$('.global-notifications').show();
+						$('.global-notifications').delay( 2000 ).fadeOut( 400 );
+						createProjectPassiveNotification(notificationData);
+					});
+				}
+			};
+			
+			$scope.getNegativeMarkingSheet = function() {
+				getNegativeMarkingSheet('<%= artifact %>', function(result){	
+					$scope.$apply(function () {
+						$scope.negativemarking = result;
+			        });
+				});
+			}
+
+			$scope.getArtifactLink = function() {
+				getArtifactLink('<%= artifact %>', '<%= project_id %>', function(result){
+					$scope.$apply(function () {
+						$scope.link = result.versions[result.versions.length-1].version;
+						$scope.last_update = result.last_update;
+						$scope.name = result.deliverable;
+						$scope.owner_id = result.mentee_id;
+						if ($scope.owner_id == '<%= user._id %>') {
+							$scope.owner=true;
+						}
+						$scope.total = 0;
+						for (var i = 0; i < $scope.negativemarking.issues.length; i++) {
+							$scope.negativemarking.issues[i].count = 0;
+							$scope.negativemarking.issues[i].score = 0;
+						}
+
+						if (result.mentor_grade) {
+							grade = result.mentor_grade.grade;
+							for (var i = 0; i < $scope.negativemarking.issues.length; i++) {
+								$scope.total = $scope.total + Number(result.mentor_grade.marks[i].score);
+								$scope.negativemarking.issues[i].count = parseInt(result.mentor_grade.marks[i].score/$scope.negativemarking.issues[i].marks);
+								$scope.negativemarking.issues[i].score = result.mentor_grade.marks[i].score;
+							};
+						} else if (result.mentee_grade && '<%= user.type%>' != 'mentor') {
+							grade = result.mentee_grade.grade;
+							for (var i = 0; i < $scope.negativemarking.issues.length; i++) {
+								$scope.total = $scope.total + Number(result.mentee_grade.marks[i].score);
+								$scope.negativemarking.issues[i].count = parseInt(result.mentee_grade.marks[i].score/$scope.negativemarking.issues[i].marks);
+								$scope.negativemarking.issues[i].score = result.mentee_grade.marks[i].score;
+							}
+						} else {
+							
+						}
+						$( "#green" ).slider({
+							orientation: "horizontal",
+							range: "min",
+							value: grade*20,
+						});
+						if ($scope.owner) {
+							//$( "#green" ).slider( "option", "disabled", true );
+							$( "#green" ).slider( "disable" );
+						}
+						$scope.tooltip();
+			        });
+				});
+			}
+			
+			$scope.getComments = function() {
+				getComments('<%= artifact %>', '<%= project_id %>', function(result){
+					$scope.$apply(function () {
+						$scope.comments = result;
+			        });
+				});
+			}
+
+			$scope.openLink = function() {
+				window.open($scope.link);
+			}
+
+			$scope.postComment = function  () {
+				var comment = {
+					"name" : '<%= user.name %>',
+					"time" : getDate(new Date()),
+					"message" : $scope.comment
+				}
+				postComment( '<%= artifact %>', '<%= project_id %>', comment, function(result){
+					
+				});
+				$scope.getComments();
+				$scope.comment = "";
+			}
+
+			$scope.postReply = function  ($event, index, reply) {
+				var comment = {
+					"name" : '<%= user.name %>',
+					"time" : getDate(new Date()),
+					"reply" : reply
+				}
+				postReply(index, '<%= artifact %>', '<%= project_id %>', comment, function(result){
+				
+				});
+				$scope.getComments();
+				$(event.target).parent().parent().find('.input-reply').val('');
+			}
+			
+			$scope.getNegativeMarkingSheet();
+			$scope.getComments();
+			$scope.getArtifactLink();
+
+			
+			
+	}]);
+	</script>
+</body>
+</html>

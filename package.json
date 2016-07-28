@@ -1,0 +1,38 @@
+{
+  "name": "torakku",
+  "version": "1.0.0",
+  "description": "This could be the final experiment before the final code structure",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/torakku/torakku_1.0.0.git"
+  },
+  "author": "Rupam Datta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/torakku/torakku_1.0.0/issues"
+  },
+  "homepage": "https://gitlab.com/torakku/torakku_1.0.0#README",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.2",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "highcharts-more": "^0.1.2",
+    "mongodb": "~2.0.33",
+    "monk": "~1.0.1",
+    "morgan": "^1.7.0",
+    "multer": "^1.1.0",
+    "nodemon": "^1.9.2",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "socket.io": "1.2.0"
+  }
+}

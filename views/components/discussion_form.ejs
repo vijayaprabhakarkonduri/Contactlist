@@ -1,0 +1,20 @@
+<div class="task-view-background">
+	<div class="discussion-subject">
+		<h3><strong>NEW DISCUSSION</strong></h3>
+	</div>
+</div>
+<div class="task-view-content">
+	<form role="form" class="row">
+	    <div class="col-md-12 form-group">
+	      	<input type="text" ng-model="subject" class="form-control field-length" placeholder="Subject">
+	    </div>
+	    <div class="col-md-12 form-group">
+	     	<textarea placeholder="Description" ng-model="description" class="form-control field-length"></textarea>
+	    </div>
+	    <div class="col-md-12 message-send-button">
+		    <button type="button" class="pull-right btn btn-primary send-button" ng-click="addDiscussion()">
+			  	<img src=" " class="glyphicon glyphicon-chevron-right"> Send
+			</button>
+		</div>
+	</form>
+</div> 

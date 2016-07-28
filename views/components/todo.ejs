@@ -1,0 +1,30 @@
+<div class="section to-do left" ng-if="todolist">
+	<div class="to-do-head section-head">
+		<h3><img src="/css/images/todo.png" />To Do List</h3>
+		<p class="todo_date"><img src="/css/images/left.png" /><span>{{todolist.date}}</span><img src="/css/images/right.png" /></p>
+	</div>
+	<div class="to-do-body">
+		<table class="to-do-list table">
+			<tr ng-repeat="x in todolist.list track by $index" class="{{x.status}}">
+				<td>
+					<div></div>
+				</td>
+				<td>
+					<p>{{x.do}}</p>
+					<span>{{x.time}}</span>
+				</td>
+				<td>
+					<img src="/css/images/tick_mark.png" ng-show="x.status=='checked'" ng-click="uncheck($event,$index)" ng-show="check" />
+					<div ng-show="x.status=='ongoing'" class="check-box" ng-click="check($event,$index)"></div>
+				</td>
+			</tr>
+		</table>							
+	</div>
+</div>
+<div class="section no-todo-list" ng-if="!todolist">
+	<div class="to-do-head section-head">
+		<h3><img src="/css/images/todo.png" />To Do List</h3>
+		<p><img src="/css/images/left.png" /><span class="todo_date">18th Feb</span><img src="/css/images/right.png" /></p>
+	</div>
+	<h1><i>There is nothing to do</i><h1/>
+</div>

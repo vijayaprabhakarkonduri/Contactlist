@@ -1,0 +1,83 @@
+<div class="projects section right" ng-if="projects[0].project_id">
+	<div class="section-head">
+		<h3><img src="/css/images/folder.png" />Projects</h3>
+	</div>
+	<div class="projects-body">
+		<div class="row">
+			<div class="no-padding" ng-repeat="x in projects" ng-class="{'col-md-8' : x.status=='recent' || x.status=='ongoing','col-md-4' : x.status=='archived'}">
+				<div class="project" ng-if="x.status =='recent'" ng-click="redirect(x.project_id)">
+					<div class="first-project-heading project-heading">
+						<h2>{{x.name}}</h2>
+						<div class="underline"></div>
+						<span>{{x.last_update}}</span>
+					</div>
+					<div class="first-project-rating">
+						<span>avg. score</span>
+						<h1 class="no-margin">{{x.rating}}</h1>
+						<span>out of 5.0</span>
+					</div>
+					<div class="first-project-score clearfix">
+						<div class="artifact-score" ng-repeat="y in x.marks">
+							<p>{{y.artifact}}</p>
+							<h1>{{y.grade}}</h1>
+						</div>
+					</div>
+					<div class="mentor-name">
+						<img src="/css/images/mentor.png" />
+						<span>{{x.mentor}}</span>
+					</div>
+				</div>
+				<div class="project" ng-if="x.status =='ongoing'" ng-click="redirect(x.project_id)">
+
+					<div class="first-project-heading project-heading">
+						<h2>{{x.name}}</h2>
+						<div class="underline"></div>
+						<span>{{x.last_update}}</span>
+					</div>
+					<div class="pull-right">
+						<p class="task-deadline">{{x.deadline}}</p>
+						<p class="mentee-last-used">{{x.timefordeadline}}</p>
+					</div>
+					<div class="mentor-skill-grading">
+						<div class="mentor-skill-status-bar" style="width:{{(x.doneartifacts/x.artifacts.length)*100}}%" data-toggle="tooltip"  title="{{currentproject.tasklist[5].task}}" data-placement="bottom"></div>
+					</div>
+					<div class="mentor-name artifact-review-button">
+						<img src="/css/images/mentor.png" />
+						<span>{{x.mentor}}</span>
+						<button class="pull-right btn btn-primary review-button" data-toggle="modal" data-target="#sendtomentor"  ng-click="getAllMentees(x.project_id, x.name);" ng-if="x.review_status">
+							<a href="" >Mentor Review</a><img src="/css/images/peer_review_arrow.png" />
+						</button>
+					</div>
+				</div>				
+				<div class="project" ng-if="x.status =='archived'" ng-click="redirect(x.project_id)">
+					<div class="project-heading">
+						<h2>{{x.name}}</h2>
+						<div class="underline"></div>
+						<span>{{x.last_update}}</span>
+					</div>
+					<div class="project-rating">
+						<span>avg. score</span>
+						<h2>{{x.rating}}</h2>
+					</div>
+					<div class="mentor-name artifact-review-button">
+						<img src="/css/images/mentor.png" />
+						<span>{{x.mentor}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div ng-if="!projects[0]" class="section">
+	<div class="section-head">
+		<h3><img src="/css/images/folder.png" />Projects</h3>
+	</div>
+	<div class="project-row" >
+		<div class="project-heading">
+			<h2>FUTURE PROJECT</h2>
+			<div class="underline"></div>
+			<h5>Date</h5>
+			<p>This is where your future project is going to show up</p>
+		</div>
+	</div>
+</div>

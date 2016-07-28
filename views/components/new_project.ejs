@@ -1,0 +1,13 @@
+<div class="create-project">
+	<div class="create-project-mentor">
+		<img ng-src="{{new_project.mentor_img}}">
+	</div>
+	<div class="create-project-content">
+		<h1 class="no-margin">{{new_project.mentor}}</h1>
+		<h2>{{new_project.mentor_qualification}}</h2>
+		<h4>{{new_project.Task_name}}</h4>		
+		<div ng-bind-html="new_project.description"></div>
+
+	</div>
+	<button><class="button" ng-click = "createProject()">Create New Project</button>
+</div>

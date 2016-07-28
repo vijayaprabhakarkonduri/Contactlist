@@ -1,0 +1,61 @@
+<div class="timelines-view-body">
+	<div class="row">
+		<div class="col-md-3 no-padding">
+			<div class="artifact">
+				<div class="project-heading">
+					<h2><img src="/css/images/timelineicon.png" />TIMELINES</h2>
+					<div class="underline"></div>
+					<span>{{timelines.last_date}}</span>
+				</div>
+				<div class="pull-right extend extend-response">
+					<span class="user-option"></span>
+					<div class="user-options">
+						<ul>
+							<li><a href="/extend_timelines/<%= user.username %>">Extend</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="pull-right extend">
+			<span class="user-option"></span>
+			<div class="user-options">
+				<ul>
+					<li><a href="/extend_timelines/<%= user.username %>">Extend</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="timelines-view-body">
+		<div class="section-head opacity">
+			<h3 ng-repeat="y in versions.versions_count" ng-class="{'active':y.active}" ng-click="toggleVersions($event)">{{y.version}}</h3>
+		</div>
+		<div class="timelines">
+			<table class="table">
+				<thead class="timelines-table-head">
+					<th>Deliverables</th>
+					<th>Start Date & Time</th>
+					<th>Submission Date & Time</th>
+					<th>Duration</th>
+				</thead>
+				<tbody class="timelines-view-table-body">
+					<tr ng-repeat="x in timelines_view.timelines" class="timelines_row">
+						<td>{{x.deliverable}}</td>
+						<td class="start-date">{{x.start_date}} | {{x.start_time}}</td>
+						<td class="start-date">{{x.submission_date}} | {{x.submission_time}}</td>
+						<td class="duration" ng-value="calDuration(x.start_date, x.start_time, x.submission_date, x.submission_time)">{{duration}}</td>
+					</tr>
+					<tr>
+						<td class="total-duration"colspan="3"></td>
+						<td class="duration">
+							<p>Total Duration</p>
+							<span ng-value="cal_total_duration()">{{total_duration}}</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+</div>

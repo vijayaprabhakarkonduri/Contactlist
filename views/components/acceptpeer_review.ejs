@@ -1,0 +1,13 @@
+<div class="peer-review-request">
+	<h2 ng-if="<%=user.type == "mentee"%>"><strong>{{peer_review.owner_name}}</strong> send <strong>{{peer_review.artifact_name}}</strong> of <strong>{{peer_review.task}}</strong> for review. Do you want to review it?</h2>
+	<h2 ng-if="<%=user.type == "mentor"%>"><strong>{{peer_review.owner_name}}</strong> send <strong>{{peer_review.task}}</strong> project for review. Do you want to review it?</h2>
+	<p>
+		"<i>{{peer_review.message}}</i>"
+	</p>
+	<div class="pull-right">
+		<a href="" ng-click="notReview(peer_review.notification_id,peer_review.project_id,peer_review.artifact_name,peer_review.owner_name,peer_review.owner_id)" ng-if="<%=user.type == "mentee"%>" >I can't do this now</a>
+		<a href="" ng-click="notReview(peer_review.project_id,peer_review.task,peer_review.name,peer_review.owner_id)" ng-if="<%=user.type == "mentor"%>">I can't do this now</a>
+		<a href="{{peer_review.link}}" ng-if="<%=user.type == "mentee"%>" ><button>Review</button></a>
+		<a href="{{peer_review.link}}" ng-if="<%=user.type == "mentor"%>" ><button>Review</button></a>
+	</div>
+</div>

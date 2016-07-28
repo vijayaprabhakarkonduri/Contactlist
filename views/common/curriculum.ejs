@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title><%= title %></title>
+	<%- include('../partials/css_includes') %>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper" ng-controller="myController">
+		<div class="header">
+			<div class="container-fluid">
+				<div class="row">
+					<%- include('../partials/header.ejs') %> 
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+
+			<div class="row page-body">
+				<div class="navigation no-padding">
+					<%- include('../partials/navigation.ejs') %>
+				</div>
+				<div class="col-md-12 body-section-layout row">
+					<div class="curriculum-view">
+						<%- include('../components/curriculum.ejs') %>
+					</div>	
+				</div>		
+				<%- include('../components/assign_task.ejs') %>
+				<%- include('../components/add_batch.ejs') %>
+			</div>
+		</div>
+	</div>
+	<%- include('../components/footer.ejs') %>	
+	<%- include('../partials/js_includes') %>
+	<script>
+		
+		myApp.controller('myController', ['$scope', 'myProfile', function($scope, myProfile){
+		
+			$scope.notificationlist = {
+						"list": [
+								{
+								  "image": "/css/images/user_male_circle.png",
+								  "lastmessage": "Hi can you come online",
+								  "time": "3 hrs ago"
+								},
+								{
+								  "image": "/css/images/user_male_circle.png",
+								  "lastmessage": "Will you review my flowcharts",
+								  "time": "3 hrs ago"
+								},
+								{
+								  "image": "/css/images/user_male_circle.png",
+								  "lastmessage": "Hey lets meet in conference",
+								  "time": "10 hrs ago"
+								},
+								{
+								  "image": "/css/images/user_male_circle.png",
+								  "lastmessage": "Your goal for the page is something not matched with the outcome",
+								  "time": "2 minutes ago"
+								},
+								{
+								  "image": "/css/images/user_male_circle.png",
+								  "lastmessage": "Hi can you come online",
+								  "time": "2 minutes ago"
+								},
+								{
+								  "image": "/css/images/user_male_circle.png",
+								  "lastmessage": "Hi can you come online",
+								  "time": "2 minutes ago"
+								}
+				]
+			}
+			$scope.fields = [
+				{
+					email: ""
+				},
+				{
+					email: ""
+				},
+				{
+					email: ""
+				}
+			];
+
+			$scope.user_id = "<%= user._id %>";
+
+			$scope.add = function() {
+				$scope.fields.push({
+			        email: ""
+			    });
+			};
+			$scope.remove = function(index) {
+				if($scope.fields.length >3) {
+					$scope.fields.splice(index, 1)
+				}
+			};			
+
+
+			$scope.getCurriculum = function() {
+				getCurriculum(function(result){  //Invoke List Task controller function.
+					console.log(result);
+					$scope.$apply(function () {
+						$scope.curriculum = result;
+					}) 
+				});
+
+			}
+			
+
+			$scope.showCurriculum = function(index) {
+				//$scope.$apply(function() {
+				//var curriculum = $scope.curriculum;	
+					$scope.curriculum.forEach(function(element, index, array) {
+						delete element.active;	
+					});	
+
+					$scope.curriculum[index].active = true;
+
+					console.log($scope.curriculum);
+				//});
+			}
+			$scope.getCurriculum();
+
+
+		    //Call/invoke $scope.getAllDiscussions()
+		    
+		}]);
+
+
+	</script>
+</body>
+</html>

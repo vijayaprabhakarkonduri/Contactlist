@@ -1,0 +1,80 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog">
+
+	<!-- Modal content-->
+		<div class="task-suggest modal-content">
+			<div class="modal-header">
+				<span><img src="/css/images/profile-icon.png"><span class="modal-title-font"> Assign a task</span></span>	
+			</div>
+			<div class="modal-body">
+				<form role="form" class="">
+				    <div class="form-group">
+				    <tag-input autocomplete='all_mentees' taglist='listthree' ng-model = "tags" placeholder = "Mentee"></tag-input>
+				    <!-- <div class="mentee-tags">
+				    	<div class="mentee-tags-input">
+				    		<div class="tags" ng-repeat="input in skill_tags">{{input.skill}}<span></span></div>
+				    		<input type="text" ng-model="tags_input" ng-keyup="" />
+				    		<div ng-if="tags_input" class="suggesion-tags" >
+								<div ng-repeat="skill_key in skills | filter : tags_input | limitTo : 3" class="" ng-click="addTag(skill_key.skill)">{{skill_key.skill}}</div>
+							</div>
+				    	</div>
+				    </div>-->
+				    </div>
+				    <div class="col-md-12 col-xs-12 input-group no-padding key-assistance" ng-click="getTask()">
+						<textarea type="text" class="comment-length form-control" placeholder="Enter Skills Required" ng-change="suggestSkillKey()" ng-model="suggestion" ></textarea>
+						<span ng-repeat="x in assistance">{{x.skill}}</span>
+					</div>
+				    <div class="form-group">
+				    	<p class="mentee-last-used"><strong>Recommended tasks</strong></p>
+				    	<div class="col-md-4 task-recommend bordered" ng-if="!(assistanceTask)" ng-hide="suggestion"></div>
+				    	<div class="col-md-4 task-recommend" ng-repeat="task in task_list | filter:{skills_required:suggestion} | limitTo : 2" ng-click = "fillTaskDetails($event, task.id, task.title)" ng-if="suggestion">
+				    		<div class="task-recommend-margin">
+					    		<span><img src="/css/images/folder.png"><span class="task-list-heading"> {{task.title}}</span></span>
+								<p class="task-list-content">{{task.task}}</p>
+								<p>{{task.skills_required}}</p>
+								<input type="hidden" value="{{task.id}}"/>
+							</div>
+						</div>
+						<div class="col-md-3 goto-library-button">
+							<a href="/library/"><label class="go-to-library">Library>></label></a>
+						</div>
+				    </div>
+				    
+				    <div class="task-suggest task-add1 each-task">
+				    	<div class="col-md-12 ">
+					    	<div class="another-task-text">
+					    		<p>(or give another task)</p>	
+			    			</div>
+					    </div>
+					    <div class="form-group">
+					        <input type="text" class="form-control field-length" placeholder="Task Name" ng-model="another_task_name" />
+					    </div>
+					    <div class="form-group">
+					        <input type="text" class="form-control field-length" placeholder="Short Description" ng-model="another_short_description">
+					    </div>
+					    <div class="form-group">
+					        <input type="text" class="form-control field-length" placeholder="Enter Skills Required" ng-model="another_skills_required" />
+					    </div>
+					    <div class="col-md-12 col-xs-12 input-group no-padding">
+							<textarea ui-tinymce="tinymceOptions" ng-model="another_task_details" class="comment-length form-control"></textarea>
+							<div class="">
+								<a href="" class="rightbuttonintext"><img src="/css/images/link_icon.png"></a>
+								<!--<a href="" class="buttonintext"><img src="/css/images/text_icon.png"></a>-->
+							</div>
+						</div>
+					</div>
+				    <div class="checkbox">
+				    	<span><img src="/css/images/Without tick.png"><span class="checkbox-text"> Team Project</span></span>
+					</div>
+				</form>
+				<div class="pull-right task-form-action">			   		
+				    <button type="submit" class="pull-right review-button send-button-task">
+			        	<a href="#" class="button" ng-click="submitAssignTask()" data-dismiss="modal">Add</a>
+			      	</button>
+			      	<a href="" class="pull-right secondary-action" data-dismiss="modal" >Discard </a>
+		    	</div>
+		   		<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>

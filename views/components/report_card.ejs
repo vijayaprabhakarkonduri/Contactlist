@@ -1,0 +1,17 @@
+<div class="skills-assesment">
+	<h4>Skills Assesment</h4>
+	<div class="row">
+		<div class="col-md-2 col-sm-2 no-padding">
+			<div class="artifacts-to-grade">
+				<p ng-repeat="x in negative_marking.project_grading" ng-class="{'low-artifact':x.Score < 2}">{{x.skill}}</p>
+			</div>
+		</div>
+		<div class="col-md-10 col-sm-10 no-padding">
+			<div class="artifacts-grade" ng-repeat="x in negative_marking.project_grading">
+				<div class="artifacts-skill-grade" style="width:{{x.score*20+'%'}}" ng-class="{'low-artifact-background':x.score < 2}">
+					<div class="artifacts-grade-round"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

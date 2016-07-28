@@ -1,0 +1,11 @@
+<div class="mentee-layout mentee-list" ng-repeat="z in mentees">
+	<div class="mentee-shuffling-img " ng-if="z.image" ><img ng-src="{{z.image}}" /></div>
+	<div class="mentee-shuffling-border " ng-if="!z.image">{{z.name[0]}}</div>
+	<input type="hidden" value="{{z.id}}" class="mentee_id_no_mentor">
+	<div class="mentee-shuffle-details ">
+		<p class="mentee-name "><strong>{{z.name}}</strong></p>
+		<p class="mentee-task-name" ng-if="z.project"> ({{z.project}})</p>
+		<p class="drag-drop-mentee" ng-if="!z.mentor">Drag and drop to assign a mentor</p>
+		<p class="drag-drop-mentee " ng-if="z.mentor">{{z.mentor}}</p>
+	</div>
+</div>

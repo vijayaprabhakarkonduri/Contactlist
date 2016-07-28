@@ -1,0 +1,18 @@
+<div class="feedback">
+	<h4>Feedback</h4>
+	<div class="feedback-grade">
+		<span>Avg.Score</span>
+		<h1>{{project_grade}}</h1>
+		<span>Out of 5.0</span>
+	</div>
+	<div class="feedback-description">
+		<p>{{negative_marking.feedback}}</p>
+	</div>
+	<div class="feedback-improove">
+		<h4>Areas of Improvement</h4>
+		<ul>
+			<li ng-repeat="improve in negative_marking.project_grading" ng-if="improve.score < 3">{{improve.skill}}</li>
+			
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+Initial directory setup files.
+
+
+
+
+
+1. List out the main routing pages from the Left Navigation [profiles, redflags, tasks etc.]
+2. List out the routing for the internal pages
+3. Copy the dashboard structure to each of the above routing pages and based on the page content, modify the components
+. 
+
+
+
+These files will be removed. For now they are renamed.
+strengths.ejs
+tasklist.ejs
+todo.ejs
+
+
+Here are the urls from top.ejs
+	<li><a href="/dashboard/mentee/123">Dashboard</a></li>
+	<li><a href="/profile/mentee/123">Profile</a></li>
+	<li><a href="/projects/mentee/123">Projects</a></li>
+	<li><a href="/projects/mentee/123">Projects</a></li>
+	<li><a href="/timelines/123">Timelines</a></li>
+	<li><a href="/project_artifacts/123">Project Artifacts</a></li>
+	<li><a href="/timelines_view/123">Timelines View</a></li>
+	<li><a href="/extend_timelines/123">Extend Timelines</a></li>
+	<li><a href="/edit_profile/123">Edit Profile</a></li>
+	<li><a href="/report_card/123">Report Card</a></li>
+	<li><a href="/negetive_marking/123">Negetive Marking Sheet</a></li>
+	<li><a href="/dashboard/mentor/123">Dashboard</a></li>
+	<li><a href="/profile/mentor/123">Profile</a></li>
+	<li><a href="/tasks_library/123">Tasks Library</a></li>
+	<li><a href="/projects/mentor/123">New Task</a></li>
+	<li><a href="/projects/mentor/123">Review Artifact</a></li>
+	<li><a href="/projects/mentor/123">Timeline Extension</a></li>
+	<li><a href="/dashboard/instructor/123">Dashboard</a></li>
+	<li><a href="/profile/instructor/123">Profile</a></li>
+	<li><a href="/tasks/instructor/123">Task Library</a></li>
+	<li><a href="/redflags/123">Redflags</a></li>
+	<li><a href="/shuffling/123">Mentor Mentee Shuffling</a></li>

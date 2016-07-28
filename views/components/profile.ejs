@@ -1,0 +1,82 @@
+<div class="profile-body timelines-body">
+	<div class="col-md-12 section-head to-do-head row">
+		<div class="col-md-11">
+			<h3>
+				<img src="/css/images/profile-icon.png" />Profile
+			</h3>
+		</div>
+		<% if(user.type === 'mentee') { %>
+		<p><img src="/css/images/profile-mentor.png" />{{mentor_name}}</p>
+		<% } %>
+		<div class="col-md-1 sharebutton" ng-if="usertype == 'mentee'">
+			<span class="user-option"></span>
+			<div class="user-options">
+				<ul>
+					<li ng-repeat="mentors in mentor_list track by $index" ng-init="mentors.status='ongoing'">
+						<img src="/css/images/tick_mark.png" ng-show="mentors.status=='checked'" ng-click="mentors.status='ongoing';getMentorId(mentors.mentor_id,0,$index)" class="mentor-selected" ng-show="check" />
+						<div ng-show="mentors.status=='ongoing'" class="check-box" ng-click="mentors.status='checked';getMentorId(mentors.mentor_id,1)"></div>
+						<a href=""  ng-click="getMentorId(mentors.mentor_id)">{{mentors.name}}</a>
+					</li>
+					<li><button class="col-md-12" ng-click="shareProfile()">Share</button></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 profile-new profile-view row">
+		<div class="col-md-8">
+			<p>Name</p>
+			<h3>{{profile_details.Name}}</h3>
+			<p>Phone Number</p>
+			<h3>{{profile_details.Phone_Number}}</h3>
+			<p>Email Id</p>
+			<h3>{{profile_details.Email_ID}}</h3>
+			<p>Personal Email ID</p>
+			<h3>{{profile_details.Personal_Email_ID}}</h3>
+			<div style="height:10px;" ng-if="usertype == 'mentor'">
+				<a href="" ng-click= "editbutton()" class="profile-view-button">
+					Edit
+				</a>
+			</div>
+		</div>
+		<div class=" col-md-4">
+			<img ng-src="{{profile_details.image}}" class="profile-img" />
+			<div class="profile-king">
+			<p class="profile-rating">{{profile_details.rating}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 hideclass edit-profile profile-view row">
+		<div class="col-md-8">
+			<form >
+				<p>Name</p>
+				<input type="text"  ng-model="profile_details.Name" />
+				<p>Phone Number</p>
+				<input type="text" ng-model="profile_details.Phone_Number" />
+				<p>Email Id</p>
+				<input type="email" ng-model="profile_details.Email_ID" />
+				<p>Personal Email ID</p>
+				<input type="email" ng-model="profile_details.Personal_Email_ID" /><br />
+				<p>Profile Image</p>
+				<input 
+	                type="file" 
+	                ngf-select 
+	                ng-model="file" 
+	                name="file" 
+	                ngf-pattern="'image/*'"
+	                accept="image/*" 
+	                ngf-max-size="20MB" 
+	                /><br />
+				<a href="" class="edit-profilebackbutton" ng-click="backbutton()">Back</a>
+				<button ng-click="updateProfile()">Update</button>
+			</form>
+			
+		</div>
+		<div class="col-md-4">
+			<img ng-src="{{profile_details.image}}" class="profile-img" />
+			<div class="profile-king">
+				<p class="profile-rating">{{profile_details.rating}}</p>
+			</div>
+		</div>
+	</div>
+</div>
+

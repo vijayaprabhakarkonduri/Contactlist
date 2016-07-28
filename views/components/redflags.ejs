@@ -1,0 +1,30 @@
+<div class="modal-header">
+	<h3><img src="/css/images/flag.png" />Red flags</h3>
+</div>
+<div class="redflag-tile task-details-layout" ng-repeat="x in redflag_mentees">
+	<div class="" >
+		<img ng-src="{{x.studentimage}}">
+		<span class="commentor-name">{{x.mentee_name}}</span>
+	</div>
+	<div class="task-name">
+		<h4><strong>{{x.Project}}</strong></h4>	
+		<div></div>
+		<p class="mentee-last-used" >Escalated by {{x.mentor_name}} ({{x.Time}})</p>
+	</div>	
+	<div class="clearfix">
+		<p class="redflag-issue">{{x.reason}}</p>
+	</div>
+	<div class="review-work">
+		<div class="redflag-mentorname">
+			<img src="/css/images/mentor-icon.png">
+			<span class="redflag-mentor">{{x.mentor}}</span>
+		</div>
+		<span class="pull-right">
+			<a href="/project_artifacts/{{x.Project_id}}">
+				<button type="button" class="btn btn-primary review-button"> View</button>
+			</a>
+		</span>
+		<div class="clearfix">
+		</div>
+	</div>		
+</div>

@@ -1,0 +1,19 @@
+<div style="width:50%;display: inline-block;" ng-repeat="x in redflag_mentees">
+	<div class="redflag-mentee">
+		<div class="" >
+			<!--<img ng-src="/css/images/ravi.png">-->
+			<span class="commentor-time">{{x.mentee_name}}</span>
+		</div>
+		<a href="/project_artifacts/{{x.Project_id}}">
+			<div class="task-name">
+				<h4><strong>{{x.Project}}</strong></h4>
+				<div></div>	
+				<p class="mentee-last-used" >{{x.Time}}</p>
+			</div>
+		</a>
+		<div class="mentor-redflag review-work">
+			<img src="/css/images/mentor.png">
+			<span>{{x.mentor}}</span>
+		</div>						
+	</div>
+</div>

@@ -1,0 +1,25 @@
+<div class="no-margin task-head-margin task-view-background">
+	<h3>ADD NEW TASK</h3>
+</div>
+<form role="form" class="task-suggest task-add1 each-task">
+    <div class="form-group">
+        <input type="text" class="form-control field-length" placeholder="Task Name" ng-model="task_name">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control field-length" placeholder="Short Description" ng-model="short_description">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control field-length" placeholder="Enter Skills Required" ng-model="skills_required" />
+    </div>
+    <div class="form-group">
+        <textarea style="height: 300px;" ui-tinymce="tinymceOptions" ng-model="task_details" class="comment-length form-control"></textarea>
+    </div>
+    <div class="pull-right task-form-action">
+	    <button class="pull-right review-button send-button-task">
+            <a href="#" class="button" ng-click="addTask()" ng-if="<%=user.type == "instructor"%>">Add</a>
+            <a href="#" class="button" ng-click="sendToInstructor()" ng-if="<%=user.type == "mentor"%>">Add</a>
+        </button>
+        <a href="#" class="pull-right secondary-action">Discard </a>
+    </div>
+    <div class="clearfix"></div>
+</form>

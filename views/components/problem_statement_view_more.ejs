@@ -1,0 +1,13 @@
+<div class="create-project view-more">
+	<div class="create-project-content project-heading">
+		<h1 class="no-margin"><img src="/css/images/problem_statement.png" />PROBLEM STATEMENT</h1>
+		<div class="underline"></div>
+		<h4>{{problem.task_name}}</h4>
+		<div ng-bind-html="problem.short_description" class = "short_description"></div>
+		<div class="view-less">
+			<div ng-bind-html="problem.description"></div>
+		</div>
+	</div>
+	<a href="#" class="view-more-link">View more</a>
+	<a href="#" class="view-less-link">View less</a>
+</div>

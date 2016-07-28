@@ -1,0 +1,21 @@
+<div class="mentess-progress-view">
+	<div class="section-head">
+		<h3><img src="/css/images/todo.png" />Mentee's Progress</h3>
+	</div>
+	<div class="row">
+		<div class="col-md-8 no-padding">
+			<div id="menteesProgressMap"></div>
+		</div>
+		<div class="col-md-4 no-padding mentees-suggestion-tile">
+			<div ng-repeat="x in suggestions" class="suggestions">
+				<div>controller</div>
+				<div>
+					{{x.message}}
+				</div>
+				<div class="suggestion-action">
+					<button class="btn pull-right">{{x.action}}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
